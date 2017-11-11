@@ -143,14 +143,20 @@ public class TESTERTeleOp extends LinearOpMode {
     public void turnTo(double degrees){
         int turnBy = -1;                 //turns clockwise
 
-        if(degrees < gyro.getHeading()){
-            turnBy *= -1;
+//        if(degrees < gyro.getHeading()){
+//            turnBy *= -1;
+//        }
+
+        telemetry.addData("In the turnTo Method", gyro.getHeading()+"");
+        telemetry.update();
+
+        while((degrees - 4.6) > gyro.getHeading() && opModeIsActive()){
+            leftMotor.setPower(-0.25);
+            rightMotor.setPower(0.25);
         }
 
-        while(degrees != gyro.getHeading()){
-            leftMotor.setPower(-turnBy);
-            rightMotor.setPower(turnBy);
-        }
+        leftMotor.setPower(0);
+        rightMotor.setPower(0);
     }
 
 
