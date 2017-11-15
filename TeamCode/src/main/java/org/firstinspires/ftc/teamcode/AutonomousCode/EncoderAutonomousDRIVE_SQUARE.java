@@ -24,6 +24,8 @@ public class EncoderAutonomousDRIVE_SQUARE extends LinearOpMode {
     private int TICKS_PER_REVOLUTION = 1120;
     ModernRoboticsI2cGyro gyro = null;
 
+    double natural_zero;
+
     @Override
     public void runOpMode() throws InterruptedException {
         telemetry.addData("Status", "Initialized");
@@ -46,15 +48,37 @@ public class EncoderAutonomousDRIVE_SQUARE extends LinearOpMode {
         //colorSensor = hardwareMap.colorSensor.get("name_of_color_sensor"); //we would configure the name of the color sensor later in the
         //ftc robot controller
 
+        telemetry.addData(">", "Calibrating Gyro");
+        telemetry.update();
+
+        gyro.calibrate();
+
+        natural_zero = gyro.getHeading();
+
+        while (gyro.isCalibrating()) {
+            telemetry.addData(">", "Calibrating Gyro. Do not touch or the grim Ashish Rao will find you");
+            telemetry.update();
+        }
+
+        // run until the end of the match (driver presses STOP)
+
+        telemetry.addData("callibration is done", "hella ");
+        telemetry.update();
+
+        waitForStart();
+
+
+
+
         start_time = System.currentTimeMillis();
         telemetry.addData("Robot starting Will this work?", "");
-        driveForward(0.25, convert_to_REV_distance(35,0));
+        driveForward(0.33, convert_to_REV_distance(15,0));
         turnTo(90);
-        driveForward(0.25, convert_to_REV_distance(35, 0));
-        turnTo(90);
-        driveForward(0.25, convert_to_REV_distance(35, 0));
-        turnTo(90);
-        driveForward(0.25, convert_to_REV_distance(35, 0));
+        driveForward(0.33, convert_to_REV_distance(15,0));
+        turnTo(180);
+        driveForward(0.33, convert_to_REV_distance(15,0));
+        turnTo(270);
+        driveForward(0.33, convert_to_REV_distance(15,0));
     }
 
     public void driveForward(double power, int distance){
@@ -66,8 +90,8 @@ public class EncoderAutonomousDRIVE_SQUARE extends LinearOpMode {
 
         leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftMotor.setPower(1);
-        rightMotor.setPower(1);
+        leftMotor.setPower(power);
+        rightMotor.setPower(power);
 
         while(leftMotor.isBusy() && rightMotor.isBusy()){
 
@@ -94,7 +118,7 @@ public class EncoderAutonomousDRIVE_SQUARE extends LinearOpMode {
         return (int) ((inches/12) * conversation_1_foot + feet*conversation_1_foot);
     }
     public void turnTo(double degrees){
-
+        int turnBy = -1;                 //turns clockwise
         telemetry.addData("In the turnTo Method", gyro.getHeading()+"");
         telemetry.update();
 
