@@ -140,7 +140,20 @@ public class VuforiaTestFORLATER extends LinearOpMode {
              */
             RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
             if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
+                if(vuMark == RelicRecoveryVuMark.LEFT){
+                    //Pass the data "LEFT" to the glyph autonomous somehow
+                }else if(vuMark == RelicRecoveryVuMark.CENTER){
+                    //Pass the data "CENTER" to the glyph autonomous somehow
+                } else if(vuMark == RelicRecoveryVuMark.RIGHT){
+                    //Pass the data "RIGHT" to the glyph autonomous somehow
+                }
+                //This should print out which one was visible
+                telemetry.addData("VuMark", "%s visible", vuMark);
 
+                /* For fun, we also exhibit the navigational pose. In the Relic Recovery game,
+                 * it is perhaps unlikely that you will actually need to act on this pose information, but
+                 * we illustrate it nevertheless, for completeness. */
+                //TODO WE CAN PROLLY REMOVE THIS POSE STUFF
                 /* Found an instance of the template. In the actual game, you will probably
                  * loop until this condition occurs, then move on to act accordingly depending
                  * on which VuMark was visible. */

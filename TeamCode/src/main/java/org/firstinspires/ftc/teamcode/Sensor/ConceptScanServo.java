@@ -18,6 +18,7 @@ import com.qualcomm.robotcore.hardware.Servo;
  *
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
+ *
  */
 @Autonomous(name = "Concept: Scan Servo", group = "Concept")
 public class ConceptScanServo extends LinearOpMode {
@@ -29,6 +30,8 @@ public class ConceptScanServo extends LinearOpMode {
 
     // Define class members
     Servo   servo;
+    Servo   servo1;
+
     double  position = (MAX_POS - MIN_POS) / 2; // Start at halfway position
     boolean rampUp = true;
 
@@ -38,7 +41,8 @@ public class ConceptScanServo extends LinearOpMode {
 
         // Connect to servo (Assume PushBot Left Hand)
         // Change the text in quotes to match any servo name on your robot.
-        servo = hardwareMap.get(Servo.class, "servo_jewel");
+        servo = hardwareMap.get(Servo.class, "servo_left");
+        servo1 = hardwareMap.get(Servo.class, "servo_right");
         //TODO: ADD A SERVO TO OUR ROBOT CONFIGURATION AND FINISH THIS CODE IN opModeISActive
 
         // Wait for the start button
@@ -75,6 +79,7 @@ public class ConceptScanServo extends LinearOpMode {
 
             // Set the servo to the new position and pause;
             servo.setPosition(position);
+            servo1.setPosition(-position);
             sleep(CYCLE_MS);
             idle();
         }
