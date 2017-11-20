@@ -32,7 +32,7 @@ public class ConceptScanServo extends LinearOpMode {
     Servo   servo;
     Servo   servo1;
 
-    double  position = (MAX_POS - MIN_POS) / 2; // Start at halfway position
+    double  position = 0;//(MAX_POS - MIN_POS) / 2; // Start at halfway position
     boolean rampUp = true;
 
 
@@ -61,6 +61,7 @@ public class ConceptScanServo extends LinearOpMode {
                 }
             // Display the current value
             servo.setPosition(position);
+            servo1.setPosition(1-position);
             telemetry.addData("Servo Position", "%5.2f", position);
             telemetry.addData(">", "Press Stop to end test.");
             telemetry.update();
