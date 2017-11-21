@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.hardware.Servo;
  *
  * This code assumes a Servo configured with the name "left claw" as is found on a pushbot.
  *
- * NOTE: When any servo position is set, ALL attached servos are activated, so ensure that any other
+ * NOTE: When any servo position is set, Am..y9LL attached servos are activated, so ensure that any other
  * connected servos are able to move freely before running this test.
  *
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
