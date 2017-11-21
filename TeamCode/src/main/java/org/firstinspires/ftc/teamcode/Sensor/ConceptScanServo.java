@@ -54,11 +54,11 @@ public class ConceptScanServo extends LinearOpMode {
         while (opModeIsActive()) {
             // slew the servo, according to the rampUp (direction) variable.
             // Keep stepping up until we hit the max value.
-                position += INCREMENT;
-                if (position >= MAX_POS) {
-                    position = MAX_POS;
-                    break;  // Switch ramp direction
-                }
+            position += INCREMENT;
+            if (position >= MAX_POS) {
+                position = MAX_POS;
+                break;  // Switch ramp direction
+            }
             // Display the current value
             servo.setPosition(position);
             servo1.setPosition(1-position);
@@ -72,8 +72,8 @@ public class ConceptScanServo extends LinearOpMode {
             idle();
         }
 
-        // Signal done;
+    // Signal done;
         telemetry.addData(">", "Done");
         telemetry.update();
-    }
+}
 }
