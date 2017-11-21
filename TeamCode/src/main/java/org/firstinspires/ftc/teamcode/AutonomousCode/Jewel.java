@@ -45,7 +45,7 @@ public class Jewel extends LinearOpMode {
     private Servo servo = null;
     private double start_time = 0;
     private final int TICKS_PER_REVOLUTION = 1120;
-    double natural_zero;
+    //double natural_zero;
 
     @Override
     public void runOpMode() throws InterruptedException {
