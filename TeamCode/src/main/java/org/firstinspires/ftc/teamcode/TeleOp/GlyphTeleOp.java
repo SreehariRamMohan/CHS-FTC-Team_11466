@@ -15,6 +15,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name="Glyph TeleOp", group="Linear Opmode")  // @Autonomous(...) is the other common choice
 public class GlyphTeleOp extends LinearOpMode {
+    static final double INCREMENT   = 0.01;     // amount to slew servo each CYCLE_MS cycle
+    static final int    CYCLE_MS    =   50;     // period of each cycle
+    static final double MAX_POS     =  0.31;     // Maximum rotational position
+    static final double MIN_POS     =  0.0;     // Minimum rotational position
 
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -24,7 +28,8 @@ public class GlyphTeleOp extends LinearOpMode {
     ModernRoboticsI2cGyro gyro = null;                    // Additional Gyro device
     DcMotor leftMotor   = null;
     DcMotor rightMotor  = null;
-    Servo servo = null;
+    Servo servo1 = null;
+    Servo servo2 = null;
 
 
     @Override
@@ -37,6 +42,8 @@ public class GlyphTeleOp extends LinearOpMode {
         gyro = (ModernRoboticsI2cGyro)hardwareMap.gyroSensor.get("sensor_gyro");
         leftMotor = (DcMotor) hardwareMap.dcMotor.get("left_drive");
         rightMotor = (DcMotor) hardwareMap.dcMotor.get("right_drive");
+        servo1 = (Servo) hardwareMap.servo.get("servo_left");
+        servo2 = (Servo) hardwareMap.servo.get("servo_right");
 
         // Ensure the robot it stationary, then reset the encoders and calibrate the gyro.
         leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -75,21 +82,6 @@ public class GlyphTeleOp extends LinearOpMode {
         rightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         leftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
-
-        //CODE HERE
-
-
-
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
-
-        leftMotor = hardwareMap.dcMotor.get("left_drive");
-        rightMotor = hardwareMap.dcMotor.get("right_drive");
-
-        // Start calibrating the gyro. This takes a few seconds and is worth performing
-        // during the initialization phase at the start of each opMode.
-        telemetry.log().add("Gyro Calibrating. Do Not Move!");
-
         // Wait until the gyro calibration is complete
         timer.reset();
 
@@ -99,6 +91,73 @@ public class GlyphTeleOp extends LinearOpMode {
         // Wait for the start button to be pressed
         waitForStart();
         runtime.reset();
+
+        double servo_position = 0;
+
+
+        double position = 0;
+
+        while(opModeIsActive()) {
+
+            if(gamepad1.a) {
+                telemetry.addData("A Pressed", "Hella");
+                telemetry.update();
+
+//                servo_position += INCREMENT;
+//                servo1.setPosition(servo_position);
+//                servo2.setPosition(1 - servo_position);
+                while (opModeIsActive()) {
+                    // slew the servo, according to the rampUp (direction) variable.
+                    // Keep stepping up until we hit the max value.
+                    position += INCREMENT;
+                    if (position >= MAX_POS) {
+                        position = MAX_POS;
+                        break;  // Switch ramp direction
+                    }
+                    // Display the current value
+                    servo1.setPosition(position);
+                    servo2.setPosition(1-position);
+                    telemetry.addData("Servo Position", "%5.2f", position);
+                    telemetry.addData(">", "Press Stop to end test.");
+                    telemetry.update();
+
+                    // Set the servo to the new position and pause;
+
+                    sleep(CYCLE_MS);
+                    idle();
+                }
+            } else if(gamepad1.b) {
+                telemetry.addData("B Pressed", "Hella");
+                telemetry.update();
+//                servo_position -= INCREMENT;
+//                servo1.setPosition(servo_position);
+//                servo2.setPosition(1 - servo_position);
+                while (opModeIsActive()) {
+                    // slew the servo, according to the rampUp (direction) variable.
+                    // Keep stepping up until we hit the max value.
+                    position -= INCREMENT;
+                    if (position <= MIN_POS) {
+                        position = MAX_POS;
+                        break;  // Switch ramp direction
+                    }
+                    // Display the current value
+                    servo1.setPosition(1-position);
+                    servo2.setPosition(position);
+                    telemetry.addData("Servo Position", "%5.2f", position);
+                    telemetry.addData(">", "Press Stop to end test.");
+                    telemetry.update();
+
+                    // Set the servo to the new position and pause;
+
+                    sleep(CYCLE_MS);
+                    idle();
+                }
+            }
+
+
+//            sleep(CYCLE_MS);
+//            idle();
+        }
 
 
 
