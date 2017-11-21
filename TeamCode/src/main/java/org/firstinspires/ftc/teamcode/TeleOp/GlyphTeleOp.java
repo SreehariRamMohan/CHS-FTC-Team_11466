@@ -120,7 +120,7 @@ public class GlyphTeleOp extends LinearOpMode {
                     telemetry.addData("Servo Position", "%5.2f", position);
                     telemetry.addData(">", "Press Stop to end test.");
                     telemetry.update();
-
+                    waitForNextHardwareCycle();
                     // Set the servo to the new position and pause;
 
                     sleep(CYCLE_MS);
@@ -146,7 +146,7 @@ public class GlyphTeleOp extends LinearOpMode {
                     telemetry.addData("Servo Position", "%5.2f", position);
                     telemetry.addData(">", "Press Stop to end test.");
                     telemetry.update();
-
+                    waitForNextHardwareCycle();
                     // Set the servo to the new position and pause;
 
                     sleep(CYCLE_MS);
