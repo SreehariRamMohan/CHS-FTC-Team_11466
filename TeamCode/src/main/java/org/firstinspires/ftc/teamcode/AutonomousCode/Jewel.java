@@ -45,6 +45,7 @@ public class Jewel extends LinearOpMode {
     private Servo servo = null;
     private double start_time = 0;
     private final int TICKS_PER_REVOLUTION = 1120;
+    private final double SPEED = 0.33;
     //double natural_zero;
 
     @Override
@@ -59,7 +60,7 @@ public class Jewel extends LinearOpMode {
         servo = hardwareMap.get(Servo.class, "servo_jewel");
         colorSensor = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
 
-        // right motor is reverse because Praneeth put right motor on backwards :/
+        // right motor is reverse because Praneeth put right motor on backwards :/ um no
         leftMotor.setDirection(DcMotor.Direction.FORWARD);
         rightMotor.setDirection(DcMotor.Direction.REVERSE);
 
@@ -95,7 +96,8 @@ public class Jewel extends LinearOpMode {
 //        servo.setPosition(0.25);
 
         servo.setPosition(0.65);
-        // driveForward(-0.33,convert_to_REV_distance(9,0));
+        Thread.sleep(2000);
+        // driveForward(-SPEED,convert_to_REV_distance(9,0));
 
         // color sensor is on the right
         OUTER: while(true) {
@@ -118,9 +120,9 @@ public class Jewel extends LinearOpMode {
             }
         }
 
-        //driveForward(0.33,convert_to_REV_distance(10,0));
+        //driveForward(SPEED,convert_to_REV_distance(10,0));
         turnTo(-90);
-        //driveForward(0.33,convert_to_REV_distance(0,2));
+        //driveForward(SPEED,convert_to_REV_distance(0,2));
 
         telemetry.addLine("YAY");
         telemetry.update();
