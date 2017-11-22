@@ -95,7 +95,7 @@ public class Jewel extends LinearOpMode {
 //        servo.setPosition(0.25);
 
         servo.setPosition(0.65);
-        driveForward(0.33,convert_to_REV_distance(9,0));
+        // driveForward(-0.33,convert_to_REV_distance(9,0));
 
         // color sensor is on the right
         while(true) {
@@ -103,9 +103,13 @@ public class Jewel extends LinearOpMode {
                 String color = getColor();
                 if(color.equals("Blue")) {
                     servo.setPosition(0.825);
+                    Thread.sleep(2000);
+                    servo.setPosition(1);
                     break;
                 } else if(color.equals("Red")) {
                     servo.setPosition(0.475);
+                    Thread.sleep(2000);
+                    servo.setPosition(0.3);
                     break;
                 } else {
                     break;
@@ -116,11 +120,12 @@ public class Jewel extends LinearOpMode {
             }
         }
 
-        driveForward(-0.33,convert_to_REV_distance(10,0));
-        turnTo(90);
-        driveForward(0.33,convert_to_REV_distance(0,2));
+        //driveForward(0.33,convert_to_REV_distance(10,0));
+        turnTo(-90);
+        //driveForward(0.33,convert_to_REV_distance(0,2));
 
-        servo.setPosition(0.3);
+        telemetry.addLine("YAY");
+        telemetry.update();
 
         while (opModeIsActive()) {
             telemetry.addData("servo position", servo.getPosition());
