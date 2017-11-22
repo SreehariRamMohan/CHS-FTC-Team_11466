@@ -98,22 +98,20 @@ public class Jewel extends LinearOpMode {
         // driveForward(-0.33,convert_to_REV_distance(9,0));
 
         // color sensor is on the right
-        while(true) {
+        OUTER: while(true) {
             try {
                 String color = getColor();
-                if(color.equals("Blue")) {
-                    servo.setPosition(0.825);
-                    Thread.sleep(2000);
-                    servo.setPosition(1);
-                    break;
-                } else if(color.equals("Red")) {
-                    servo.setPosition(0.475);
-                    Thread.sleep(2000);
-                    servo.setPosition(0.3);
-                    break;
-                } else {
-                    break;
-                    // recalibrate
+                switch(color) {
+                    case "Blue": servo.setPosition(0.825);
+                                 Thread.sleep(2000);
+                                 servo.setPosition(1);
+                                 break OUTER;
+                    case "Red":  servo.setPosition(0.475);
+                                 Thread.sleep(2000);
+                                 servo.setPosition(0.3);
+                                 break OUTER;
+                    default:     //recalibrate
+                                 break OUTER;
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -167,16 +165,13 @@ public class Jewel extends LinearOpMode {
 
         // values is a reference to the hsvValues array.
         float[] hsvValues = new float[3];
-        final float values[] = hsvValues;
 
-        boolean bPrevState = false;
         boolean bCurrState = gamepad1.x;
 
         if (colorSensor instanceof SwitchableLight) {
             ((SwitchableLight)colorSensor).enableLight(true);
         }
 
-        bPrevState = bCurrState;
         NormalizedRGBA colors = colorSensor.getNormalizedColors();
 
         Color.colorToHSV(colors.toColor(), hsvValues);
@@ -205,7 +200,7 @@ public class Jewel extends LinearOpMode {
     }
 
     public int convert_to_REV_distance(int inches, int feet) {
-        return (int)((inches/12) * TICKS_PER_REVOLUTION + feet*TICKS_PER_REVOLUTION);
+        return (inches/12) * TICKS_PER_REVOLUTION + feet*TICKS_PER_REVOLUTION;
     }
 
     public void turnTo(double degrees){
