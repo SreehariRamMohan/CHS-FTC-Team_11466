@@ -33,7 +33,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 import static java.lang.Thread.sleep;
 
-@Autonomous(name="Jewel Blue", group="Iterative Opmode")  // @Autonomous(...) is the other common choice
+@Autonomous(name="Jewel Red", group="Iterative Opmode")  // @Autonomous(...) is the other common choice
 
 public class Jewel extends LinearOpMode {
 
@@ -96,9 +96,12 @@ public class Jewel extends LinearOpMode {
 //        servo.setPosition(0.25);
 
         servo.setPosition(0.65);
-        Thread.sleep(2000);
-        // driveForward(-SPEED,convert_to_REV_distance(9,0));
-
+        //Thread.sleep(2000);
+        rightMotor.setDirection(DcMotor.Direction.FORWARD);
+        leftMotor.setDirection(DcMotor.Direction.REVERSE);
+        driveForward(SPEED,convert_to_REV_distance(9,0));
+        leftMotor.setDirection(DcMotor.Direction.FORWARD);
+        rightMotor.setDirection(DcMotor.Direction.REVERSE);
         // color sensor is on the right
         OUTER: while(true) {
             try {
@@ -120,9 +123,9 @@ public class Jewel extends LinearOpMode {
             }
         }
 
-        //driveForward(SPEED,convert_to_REV_distance(10,0));
+        driveForward(SPEED,convert_to_REV_distance(10,0));
         turnTo(-90);
-        //driveForward(SPEED,convert_to_REV_distance(0,2));
+        driveForward(SPEED,convert_to_REV_distance(0,2));
 
         telemetry.addLine("YAY");
         telemetry.update();
@@ -142,26 +145,52 @@ public class Jewel extends LinearOpMode {
 
         leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        //TODO: MAKE SURE ROBOT DRIVES STRAIGHT
-
-        double power2 = 0.01;
-
-        leftMotor.setPower(power2);
-        rightMotor.setPower(power2);
-
+        go(power);
         while(leftMotor.isBusy() && rightMotor.isBusy()){
-            if (power2 < power) {
-                power2 *= 1.2;
-            }
-            leftMotor.setPower(power2);
-            rightMotor.setPower(power2);
+
         }
-        stopDriving();
+        StopDriving();
 
         leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
+    public void go(double power){
+        //For now, we set leftMotor power to negative because our summer training robot has the left motor facing backwards. TODO: Change this after when we switch robots
+        leftMotor.setPower(power);
+        rightMotor.setPower(power);
+    }
+    public void StopDriving(){
+        leftMotor.setPower(0);
+        rightMotor.setPower(0);
+    }
+
+//    public void driveForward(double power, int distance){
+//        leftMotor.setMode(DcMotor.RunMode.RESET_ENCODERS);
+//        rightMotor.setMode(DcMotor.RunMode.RESET_ENCODERS);
+//
+//        leftMotor.setTargetPosition(distance);
+//        rightMotor.setTargetPosition(distance);
+//
+//        leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//
+//        double power2 = 0.01;
+//
+//        leftMotor.setPower(power2);
+//        rightMotor.setPower(power2);
+//
+//        while(leftMotor.isBusy() && rightMotor.isBusy()){
+//            if (power2 < power) {
+//                power2 *= 1.2;
+//            }
+//            leftMotor.setPower(power2);
+//            rightMotor.setPower(power2);
+//        }
+//        stopDriving();
+//
+//        leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//    }
 
     public String getColor() throws InterruptedException {
 
