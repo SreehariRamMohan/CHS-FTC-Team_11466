@@ -99,59 +99,19 @@ public class GlyphTeleOp extends LinearOpMode {
 
         while(opModeIsActive()) {
 
-            if(gamepad1.a) {
+            if(gamepad1.left_trigger>0.5) {
                 telemetry.addData("A Pressed", "Hella");
                 telemetry.update();
-
-//                servo_position += INCREMENT;
-//                servo1.setPosition(servo_position);
-//                servo2.setPosition(1 - servo_position);
-                while (opModeIsActive()) {
-                    // slew the servo, according to the rampUp (direction) variable.
-                    // Keep stepping up until we hit the max value.
-                    position += INCREMENT;
-                    if (position >= MAX_POS) {
-                        position = MAX_POS;
-                        break;  // Switch ramp direction
-                    }
-                    // Display the current value
-                    servo1.setPosition(position);
-                    servo2.setPosition(1-position);
-                    telemetry.addData("Servo Position", "%5.2f", position);
-                    telemetry.addData(">", "Press Stop to end test.");
-                    telemetry.update();
-                    waitForNextHardwareCycle();
-                    // Set the servo to the new position and pause;
-
-                    sleep(CYCLE_MS);
-                    idle();
-                }
-            } else if(gamepad1.b) {
+                servo_position += INCREMENT;
+                servo1.setPosition(servo_position);
+                servo2.setPosition(1 - servo_position);
+            } else if(gamepad1.right_trigger>0.5) {
                 telemetry.addData("B Pressed", "Hella");
                 telemetry.update();
-//                servo_position -= INCREMENT;
-//                servo1.setPosition(servo_position);
-//                servo2.setPosition(1 - servo_position);
-                while (opModeIsActive()) {
-                    // slew the servo, according to the rampUp (direction) variable.
-                    // Keep stepping up until we hit the max value.
-                    position -= INCREMENT;
-                    if (position <= MIN_POS) {
-                        position = MAX_POS;
-                        break;  // Switch ramp direction
-                    }
-                    // Display the current value
-                    servo1.setPosition(1-position);
-                    servo2.setPosition(position);
-                    telemetry.addData("Servo Position", "%5.2f", position);
-                    telemetry.addData(">", "Press Stop to end test.");
-                    telemetry.update();
-                    waitForNextHardwareCycle();
-                    // Set the servo to the new position and pause;
+                servo_position -= INCREMENT;
+                servo1.setPosition(servo_position);
+                servo2.setPosition(1 - servo_position);
 
-                    sleep(CYCLE_MS);
-                    idle();
-                }
             }
 
 
