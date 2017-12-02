@@ -96,12 +96,13 @@ public class Jewel extends LinearOpMode {
 //        servo.setPosition(0.25);
 
         servo.setPosition(0.65);
-        //Thread.sleep(2000);
+        Thread.sleep(2000);
         rightMotor.setDirection(DcMotor.Direction.FORWARD);
         leftMotor.setDirection(DcMotor.Direction.REVERSE);
-        driveForward(SPEED,convert_to_REV_distance(9,0));
+        driveForward(0.33,convert_to_REV_distance(13,0));
         leftMotor.setDirection(DcMotor.Direction.FORWARD);
         rightMotor.setDirection(DcMotor.Direction.REVERSE);
+        Thread.sleep(2000);
         // color sensor is on the right
         OUTER: while(true) {
             try {
@@ -137,8 +138,8 @@ public class Jewel extends LinearOpMode {
     }
 
     public void driveForward(double power, int distance){
-        leftMotor.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        rightMotor.setMode(DcMotor.RunMode.RESET_ENCODERS);
+//        leftMotor.setMode(DcMotor.RunMode.RESET_ENCODERS);
+//        rightMotor.setMode(DcMotor.RunMode.RESET_ENCODERS);
 
         leftMotor.setTargetPosition(distance);
         rightMotor.setTargetPosition(distance);
