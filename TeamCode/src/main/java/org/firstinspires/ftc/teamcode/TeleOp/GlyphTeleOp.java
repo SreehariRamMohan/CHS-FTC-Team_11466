@@ -9,13 +9,13 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
- * Created by anjanbharadwaj on 11/13/17.
+ * Created by sreeharirammohan on 11/13/17.
  */
 
 
 @TeleOp(name="Glyph TeleOp", group="Linear Opmode")  // @Autonomous(...) is the other common choice
 public class GlyphTeleOp extends LinearOpMode {
-    static final double INCREMENT   = 0.01;     // amount to slew servo each CYCLE_MS cycle
+    static final double INCREMENT   = 0.001;     // amount to slew servo each CYCLE_MS cycle
     static final int    CYCLE_MS    =   50;     // period of each cycle
     static final double MAX_POS     =  0.31;     // Maximum rotational position
     static final double MIN_POS     =  0.0;     // Minimum rotational position
@@ -31,6 +31,9 @@ public class GlyphTeleOp extends LinearOpMode {
     Servo servo1 = null;
     Servo servo2 = null;
 
+    private double y1 = 0.;
+    private double y2 = 0.;
+    private double speed = .3;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -94,36 +97,57 @@ public class GlyphTeleOp extends LinearOpMode {
 
         double servo_position = 0;
 
-
-        double position = 0;
-
         while(opModeIsActive()) {
 
             if(gamepad1.left_trigger>0.5) {
                 telemetry.addData("A Pressed", "Hella");
                 telemetry.update();
                 servo_position += INCREMENT;
-                if(servo_position>1) servo_position = 1;
+                if(servo_position > MAX_POS) servo_position = MAX_POS;
                 servo1.setPosition(servo_position);
                 servo2.setPosition(1 - servo_position);
             } else if(gamepad1.right_trigger>0.5) {
                 telemetry.addData("B Pressed", "Hella");
                 telemetry.update();
-                servo_position -= INCREMENT;
-                if(servo_position<0) servo_position = 0;
-                servo1.setPosition(servo_position);
-                servo2.setPosition(1 - servo_position);
+                servo_position -= (3*INCREMENT);
+                if(servo_position < MIN_POS) servo_position = MIN_POS;
+                servo1.setPosition(1-servo_position);
+                servo2.setPosition(servo_position);
+
+            } else {
+                servo_position = 0.5;
 
             }
+            telemetry.addData("Servo position: " + servo_position, "Hella");
+            telemetry.update();
 
+            sleep(CYCLE_MS);
+            idle();
 
-//            sleep(CYCLE_MS);
-//            idle();
+            y1 = gamepad1.left_stick_y;
+            y2 = gamepad1.right_stick_y;
+            telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.addData("rightMotor: " + y2, "leftMotor: " + y1);
+            telemetry.addData("speed: ", speed);
+            telemetry.update();
+
+            // eg: Run wheels in tank mode (note: The joystick goes negative when pushed forwards)
+
+            //forward movement
+            leftMotor.setPower(-y1 * speed);
+            rightMotor.setPower(-y2 * speed);
+
+            if(gamepad1.b){
+                leftMotor.setPower(0);
+                rightMotor.setPower(0);
+            }
+
         }
 
 
 
     }
+
     public void driveForward(double power, int distance){
         leftMotor.setMode(DcMotor.RunMode.RESET_ENCODERS);
         rightMotor.setMode(DcMotor.RunMode.RESET_ENCODERS);
@@ -173,6 +197,14 @@ public class GlyphTeleOp extends LinearOpMode {
 
         leftMotor.setPower(0);
         rightMotor.setPower(0);
+    }
+
+    public void wait(double seconds){
+        double time = this.time;
+        while(this.time - time < seconds){
+
+            //does nothing, purpose is to wait a certain amount of seconds
+        }
     }
 
 
