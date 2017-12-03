@@ -13,8 +13,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 
-@TeleOp(name="Glyph TeleOp Version 2", group="Linear Opmode")  // @Autonomous(...) is the other common choice
-public class GlyphTeleOpV2 extends LinearOpMode {
+@TeleOp(name="Glyph TeleOp Version 3", group="Linear Opmode")  // @Autonomous(...) is the other common choice
+public class GlyphTeleOpV3 extends LinearOpMode {
     static final double INCREMENT   = 0.001;     // amount to slew servo each CYCLE_MS cycle
     static final int    CYCLE_MS    =   50;     // period of each cycle
     static final double MAX_POS     =  0.31;     // Maximum rotational position
@@ -27,6 +27,7 @@ public class GlyphTeleOpV2 extends LinearOpMode {
 
     ModernRoboticsI2cGyro gyro = null;                    // Additional Gyro device
     DcMotor leftMotor   = null;
+    DcMotor pulleyMotor   = null;
     DcMotor rightMotor  = null;
     Servo servo1 = null;
     Servo servo2 = null;
@@ -44,6 +45,7 @@ public class GlyphTeleOpV2 extends LinearOpMode {
         //robot.init(hardwareMap);
         gyro = (ModernRoboticsI2cGyro)hardwareMap.gyroSensor.get("sensor_gyro");
         leftMotor = (DcMotor) hardwareMap.dcMotor.get("left_drive");
+        pulleyMotor = (DcMotor) hardwareMap.dcMotor.get("pulley");
         rightMotor = (DcMotor) hardwareMap.dcMotor.get("right_drive");
         servo1 = (Servo) hardwareMap.servo.get("servo_left");
         servo2 = (Servo) hardwareMap.servo.get("servo_right");
@@ -104,20 +106,48 @@ public class GlyphTeleOpV2 extends LinearOpMode {
                 telemetry.addData("A Pressed", "Hella");
                 telemetry.update();
                 servo_position += INCREMENT;
+                if(servo_position < MIN_POS) servo_position = MIN_POS;
                 if(servo_position > MAX_POS) servo_position = MAX_POS;
                 servo1.setPosition(servo_position);
-                servo2.setPosition(1 - servo_position);
+                //servo2.setPosition(1 - servo_position);
             } else if(gamepad1.right_trigger>0.5) {
                 telemetry.addData("B Pressed", "Hella");
                 telemetry.update();
-                servo_position -= (3*INCREMENT);
+                servo_position += (INCREMENT);
                 if(servo_position < MIN_POS) servo_position = MIN_POS;
-                servo1.setPosition(1-servo_position);
+                if(servo_position > MAX_POS) servo_position = MAX_POS;
+                //servo1.setPosition(1-servo_position);
                 servo2.setPosition(servo_position);
+
+            }else if(gamepad1.left_bumper) {
+                telemetry.addData("B Pressed", "Hella");
+                telemetry.update();
+                servo_position -= (INCREMENT);
+                if(servo_position < MIN_POS) servo_position = MIN_POS;
+                if(servo_position > MAX_POS) servo_position = MAX_POS;
+                servo1.setPosition(1-servo_position);
+                //servo2.setPosition(servo_position);
+
+            }else if(gamepad1.right_bumper) {
+                telemetry.addData("B Pressed", "Hella");
+                telemetry.update();
+                servo_position -= (INCREMENT);
+                if(servo_position < MIN_POS) servo_position = MIN_POS;
+                if(servo_position > MAX_POS) servo_position = MAX_POS;
+                //servo1.setPosition(1-servo_position);
+                servo2.setPosition(1-servo_position);
 
             } else {
                 servo1.setPosition(start1);
                 servo2.setPosition(start2);
+            }
+
+            if(gamepad1.dpad_up) {
+                pulleyMotor.setPower(0.5);
+            } else if(gamepad1.dpad_down) {
+                pulleyMotor.setPower(-0.5);
+            } else {
+                pulleyMotor.setPower(0);
             }
             telemetry.addData("Servo position: " + servo_position, "Hella");
             telemetry.update();
