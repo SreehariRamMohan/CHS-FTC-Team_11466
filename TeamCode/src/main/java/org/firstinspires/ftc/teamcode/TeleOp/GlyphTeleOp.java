@@ -28,6 +28,8 @@ public class GlyphTeleOp extends LinearOpMode {
     ModernRoboticsI2cGyro gyro = null;                    // Additional Gyro device
     DcMotor leftMotor   = null;
     DcMotor rightMotor  = null;
+    DcMotor pulleyMotor   = null;
+
     Servo servo1 = null;
     Servo servo2 = null;
 
@@ -97,7 +99,10 @@ public class GlyphTeleOp extends LinearOpMode {
 
         double servo_position = 0;
 
+
         while(opModeIsActive()) {
+
+
 
             if(gamepad1.left_trigger>0.5) {
                 telemetry.addData("A Pressed", "Hella");
@@ -113,11 +118,11 @@ public class GlyphTeleOp extends LinearOpMode {
                 if(servo_position < MIN_POS) servo_position = MIN_POS;
                 servo1.setPosition(1-servo_position);
                 servo2.setPosition(servo_position);
-
             } else {
-                servo_position = 0.5;
-
+                servo1.setPosition(servo1.getPosition());
+                servo2.setPosition(servo2.getPosition());
             }
+
             telemetry.addData("Servo position: " + servo_position, "Hella");
             telemetry.update();
 
@@ -140,6 +145,14 @@ public class GlyphTeleOp extends LinearOpMode {
             if(gamepad1.b){
                 leftMotor.setPower(0);
                 rightMotor.setPower(0);
+            }
+
+            if(gamepad1.dpad_up) {
+                pulleyMotor.setPower(-0.5);
+            } else if(gamepad1.dpad_down) {
+                pulleyMotor.setPower(0.5);
+            } else {
+                pulleyMotor.setPower(0);
             }
 
         }
