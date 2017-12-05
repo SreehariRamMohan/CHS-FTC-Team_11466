@@ -112,8 +112,8 @@ public class GlyphTeleOpV3 extends LinearOpMode {
                 //servo1.setPosition(1-servo_position);
                 servo2.setPosition(1-servo_position);
             } else {
-                servo1.setPosition(start1);
-                servo2.setPosition(start2);
+                //servo1.setPosition(start1);
+                //servo2.setPosition(start2);
             }
             if(gamepad1.dpad_up) {
                 pulleyMotor.setPower(0.5);

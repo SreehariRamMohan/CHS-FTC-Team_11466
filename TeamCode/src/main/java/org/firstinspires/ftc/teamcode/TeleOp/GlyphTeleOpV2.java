@@ -26,6 +26,7 @@ public class GlyphTeleOpV2 extends LinearOpMode {
     private double y1 = 0.;
     private double y2 = 0.;
     private double speed = .4;
+
     @Override
     public void runOpMode() throws InterruptedException {
         /*

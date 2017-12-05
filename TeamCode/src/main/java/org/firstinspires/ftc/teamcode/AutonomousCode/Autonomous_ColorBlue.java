@@ -119,7 +119,7 @@ public class Autonomous_ColorBlue extends LinearOpMode {
             }
 
         }
-
+        /*
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
         parameters.vuforiaLicenseKey = "Aeaj8tD/////AAAAGW6Wh+xeOELSl05fggXCvs+JRckfIhAAgllP8tM1hJ7PMV7jHtRtTppBITGm51+X50wNJNHDXpZs7/qdm40pOq3jC/3Bgz2ikwHANjDyKdT/GMyPOKCiOYmFfbwzhRfMDC6zrh3xubGspJOJY6GGhRX2sk1q/NEmlMgLnZ/i5FHlkhIe8d12BRzSKUTolwxMzDucm21O4iruVbA/6ojfW0xLN8xzu5OX8EVclVAC5ZbTdVKe8cUysBdJAUgbATu0L42HXsGqG+McRwnhhg+A5ESeLwb7Oy23gmfq1Pkfd+5sbVrZWJD5+c8Gg1B6BIKuwHvNkZl3OgngJH5EtWgTaUV2z4OZZFtBYOnY/HGxK5jr";
@@ -152,6 +152,7 @@ public class Autonomous_ColorBlue extends LinearOpMode {
 
             telemetry.update();
         }
+        */
     }
 
     public void driveForward(double power, int distance){
