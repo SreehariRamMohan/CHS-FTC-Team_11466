@@ -49,6 +49,8 @@ public class GlyphTeleOp extends LinearOpMode {
         rightMotor = (DcMotor) hardwareMap.dcMotor.get("right_drive");
         servo1 = (Servo) hardwareMap.servo.get("servo_left");
         servo2 = (Servo) hardwareMap.servo.get("servo_right");
+        pulleyMotor = (DcMotor) hardwareMap.dcMotor.get("pulley");
+
 
         // Ensure the robot it stationary, then reset the encoders and calibrate the gyro.
         leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -99,7 +101,8 @@ public class GlyphTeleOp extends LinearOpMode {
 
         double servo_position = 0;
 
-
+        double start_1 = servo1.getPosition();
+        double start_2 = servo2.getPosition();
         while(opModeIsActive()) {
 
 
@@ -119,8 +122,9 @@ public class GlyphTeleOp extends LinearOpMode {
                 servo1.setPosition(1-servo_position);
                 servo2.setPosition(servo_position);
             } else {
-                servo1.setPosition(servo1.getPosition());
-                servo2.setPosition(servo2.getPosition());
+
+                servo1.setPosition(start_1);
+                servo2.setPosition(start_2);
             }
 
             telemetry.addData("Servo position: " + servo_position, "Hella");
@@ -147,13 +151,7 @@ public class GlyphTeleOp extends LinearOpMode {
                 rightMotor.setPower(0);
             }
 
-            if(gamepad1.dpad_up) {
-                pulleyMotor.setPower(-0.5);
-            } else if(gamepad1.dpad_down) {
-                pulleyMotor.setPower(0.5);
-            } else {
-                pulleyMotor.setPower(0);
-            }
+
 
         }
 
