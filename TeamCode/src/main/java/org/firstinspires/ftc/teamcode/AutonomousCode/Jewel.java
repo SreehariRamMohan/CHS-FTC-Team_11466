@@ -64,19 +64,21 @@ public class Jewel extends LinearOpMode {
         leftMotor.setDirection(DcMotor.Direction.FORWARD);
         rightMotor.setDirection(DcMotor.Direction.REVERSE);
 
-        telemetry.addData(">", "calibrating gyro");
-        telemetry.update();
-        gyro.calibrate();
+//        telemetry.addData(">", "calibrating gyro");
+//        telemetry.update();
+//        gyro.calibrate();
 
         //natural_zero = gyro.getHeading();
 
-        while (gyro.isCalibrating()) {
-            telemetry.addData("calibrating", "DO NOT TOUCH or the grim Ashish Rao will find you");
-            telemetry.update();
-        }
+//        while (gyro.isCalibrating()) {
+//            telemetry.addData("calibrating", "DO NOT TOUCH or the grim Ashish Rao will find you");
+//            telemetry.update();
+//        }
 
         telemetry.addData("calibration is done", "hella ");
         telemetry.update();
+
+
 
         waitForStart();
 
@@ -96,23 +98,29 @@ public class Jewel extends LinearOpMode {
 //        servo.setPosition(0.25);
 
         servo.setPosition(0.65);
+        servo.setPosition(0.65);
         Thread.sleep(2000);
+
         rightMotor.setDirection(DcMotor.Direction.FORWARD);
         leftMotor.setDirection(DcMotor.Direction.REVERSE);
         driveForward(0.33,convert_to_REV_distance(13,0));
         leftMotor.setDirection(DcMotor.Direction.FORWARD);
         rightMotor.setDirection(DcMotor.Direction.REVERSE);
-        Thread.sleep(2000);
+        //Thread.sleep(2000);
         // color sensor is on the right
         OUTER: while(true) {
             try {
                 String color = getColor();
                 switch(color) {
-                    case "Blue": servo.setPosition(0.825);
+                    case "Blue": telemetry.addData("blue", "");
+                                 telemetry.update();
+                                 servo.setPosition(0.825);
                                  Thread.sleep(2000);
                                  servo.setPosition(1);
                                  break OUTER;
-                    case "Red":  servo.setPosition(0.475);
+                    case "Red":  telemetry.addData("red", "");
+                                 telemetry.update();
+                                 servo.setPosition(0.475);
                                  Thread.sleep(2000);
                                  servo.setPosition(0.3);
                                  break OUTER;
@@ -124,9 +132,9 @@ public class Jewel extends LinearOpMode {
             }
         }
 
-        driveForward(SPEED,convert_to_REV_distance(10,0));
+        driveForward(SPEED,convert_to_REV_distance(11,0));
         turnTo(-90);
-        driveForward(SPEED,convert_to_REV_distance(0,2));
+        driveForward(SPEED,convert_to_REV_distance(11,0));
 
         telemetry.addLine("YAY");
         telemetry.update();
@@ -138,8 +146,8 @@ public class Jewel extends LinearOpMode {
     }
 
     public void driveForward(double power, int distance){
-//        leftMotor.setMode(DcMotor.RunMode.RESET_ENCODERS);
-//        rightMotor.setMode(DcMotor.RunMode.RESET_ENCODERS);
+        leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         leftMotor.setTargetPosition(distance);
         rightMotor.setTargetPosition(distance);
@@ -232,7 +240,7 @@ public class Jewel extends LinearOpMode {
     }
 
     public int convert_to_REV_distance(int inches, int feet) {
-        return (inches/12) * TICKS_PER_REVOLUTION + feet*TICKS_PER_REVOLUTION;
+        return (int)((inches/12) * TICKS_PER_REVOLUTION + feet*TICKS_PER_REVOLUTION);
     }
 
     public void turnTo(double degrees){
