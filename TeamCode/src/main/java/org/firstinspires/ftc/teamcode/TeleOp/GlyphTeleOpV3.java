@@ -80,7 +80,7 @@ public class GlyphTeleOpV3 extends LinearOpMode {
         double start2 = servo2.getPosition();
         while(opModeIsActive()) {
             if(gamepad1.left_trigger>0.5) {
-                telemetry.addData("A Pressed", "Hella");
+                telemetry.addData("Left trigger", servo1.getPosition());
                 telemetry.update();
                 servo_position += INCREMENT;
                 if(servo_position < MIN_POS) servo_position = MIN_POS;
@@ -88,7 +88,7 @@ public class GlyphTeleOpV3 extends LinearOpMode {
                 servo1.setPosition(servo_position);
                 //servo2.setPosition(1 - servo_position);
             } else if(gamepad1.right_trigger>0.5) {
-                telemetry.addData("B Pressed", "Hella");
+                telemetry.addData("Right trigger", servo1.getPosition());
                 telemetry.update();
                 servo_position += (INCREMENT);
                 if(servo_position < MIN_POS) servo_position = MIN_POS;
@@ -96,7 +96,7 @@ public class GlyphTeleOpV3 extends LinearOpMode {
                 //servo1.setPosition(1-servo_position);
                 servo2.setPosition(servo_position);
             }else if(gamepad1.left_bumper) {
-                telemetry.addData("B Pressed", "Hella");
+                telemetry.addData("Left bumper", servo1.getPosition());
                 telemetry.update();
                 servo_position -= (INCREMENT);
                 if(servo_position < MIN_POS) servo_position = MIN_POS;
@@ -104,7 +104,7 @@ public class GlyphTeleOpV3 extends LinearOpMode {
                 servo1.setPosition(1-servo_position);
                 //servo2.setPosition(servo_position);
             }else if(gamepad1.right_bumper) {
-                telemetry.addData("B Pressed", "Hella");
+                telemetry.addData("Right bumper", servo1.getPosition());
                 telemetry.update();
                 servo_position -= (INCREMENT);
                 if(servo_position < MIN_POS) servo_position = MIN_POS;
@@ -112,8 +112,10 @@ public class GlyphTeleOpV3 extends LinearOpMode {
                 //servo1.setPosition(1-servo_position);
                 servo2.setPosition(1-servo_position);
             } else {
-                //servo1.setPosition(start1);
-                //servo2.setPosition(start2);
+                telemetry.addData("In Else", servo1.getPosition());
+                telemetry.update();
+                servo1.setPosition(start1);
+                servo2.setPosition(start2);
             }
             if(gamepad1.dpad_up) {
                 pulleyMotor.setPower(0.5);
