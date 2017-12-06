@@ -46,23 +46,23 @@ public class GlyphTeleOpV3 extends LinearOpMode {
         // Send telemetry message to alert driver that we are calibrating;
         telemetry.addData(">", "Calibrating Gyro");    //
         telemetry.update();
-        gyro.calibrate();
-        // make sure the gyro is calibrated before continuing
-        while (gyro.isCalibrating())  {
-            Thread.sleep(50);
-            idle();
-        }
+//        gyro.calibrate();
+//        // make sure the gyro is calibrated before continuing
+//        while (gyro.isCalibrating())  {
+//            Thread.sleep(50);
+//            idle();
+//        }
         telemetry.addData(">", "Robot Ready.");    //
         telemetry.update();
         leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         // Wait for the game to start (Display Gyro value), and reset gyro before we move..
-        while (!isStarted()) {
-            telemetry.addData(">", "Robot Heading = %d", gyro.getIntegratedZValue());
-            telemetry.update();
-            idle();
-        }
-        gyro.resetZAxisIntegrator();
+//        while (!isStarted()) {
+//            telemetry.addData(">", "Robot Heading = %d", gyro.getIntegratedZValue());
+//            telemetry.update();
+//            idle();
+//        }
+//        gyro.resetZAxisIntegrator();
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
         // Put a hold after each turn
@@ -80,41 +80,41 @@ public class GlyphTeleOpV3 extends LinearOpMode {
         double start2 = servo2.getPosition();
         while(opModeIsActive()) {
             if(gamepad1.left_trigger>0.5) {
-                telemetry.addData("Left trigger", servo1.getPosition());
+                telemetry.addData("L trigger", "Hella");
                 telemetry.update();
                 servo_position += INCREMENT;
-                if(servo_position < MIN_POS) servo_position = MIN_POS;
-                if(servo_position > MAX_POS) servo_position = MAX_POS;
+                //if(servo_position < MIN_POS) servo_position = MIN_POS;
+                //if(servo_position > MAX_POS) servo_position = MAX_POS;
                 servo1.setPosition(servo_position);
                 //servo2.setPosition(1 - servo_position);
             } else if(gamepad1.right_trigger>0.5) {
-                telemetry.addData("Right trigger", servo1.getPosition());
+                telemetry.addData("R Trigger", "Hella");
                 telemetry.update();
                 servo_position += (INCREMENT);
-                if(servo_position < MIN_POS) servo_position = MIN_POS;
-                if(servo_position > MAX_POS) servo_position = MAX_POS;
+                //if(servo_position < MIN_POS) servo_position = MIN_POS;
+                //if(servo_position > MAX_POS) servo_position = MAX_POS;
                 //servo1.setPosition(1-servo_position);
                 servo2.setPosition(servo_position);
             }else if(gamepad1.left_bumper) {
-                telemetry.addData("Left bumper", servo1.getPosition());
+                telemetry.addData("L Bumper", "Hella");
                 telemetry.update();
                 servo_position -= (INCREMENT);
-                if(servo_position < MIN_POS) servo_position = MIN_POS;
-                if(servo_position > MAX_POS) servo_position = MAX_POS;
+                //if(servo_position < MIN_POS) servo_position = MIN_POS;
+                //if(servo_position > MAX_POS) servo_position = MAX_POS;
                 servo1.setPosition(1-servo_position);
                 //servo2.setPosition(servo_position);
             }else if(gamepad1.right_bumper) {
-                telemetry.addData("Right bumper", servo1.getPosition());
+                telemetry.addData("R Bumper", "Hella");
                 telemetry.update();
                 servo_position -= (INCREMENT);
-                if(servo_position < MIN_POS) servo_position = MIN_POS;
-                if(servo_position > MAX_POS) servo_position = MAX_POS;
+                //if(servo_position < MIN_POS) servo_position = MIN_POS;
+                //if(servo_position > MAX_POS) servo_position = MAX_POS;
                 //servo1.setPosition(1-servo_position);
                 servo2.setPosition(1-servo_position);
             } else {
-                telemetry.addData("In Else", servo1.getPosition());
-                telemetry.update();
-                servo1.setPosition(start1);
+                servo1.setDirection(D);
+                servo2.setDirection();
+                servo1.setPosition(0.5);
                 servo2.setPosition(start2);
             }
             if(gamepad1.dpad_up) {
@@ -124,15 +124,12 @@ public class GlyphTeleOpV3 extends LinearOpMode {
             } else {
                 pulleyMotor.setPower(0);
             }
-            telemetry.addData("Servo position: " + servo_position, "Hella");
-            telemetry.update();
+
             sleep(CYCLE_MS);
             idle();
             y1 = gamepad1.left_stick_y;
             y2 = gamepad1.right_stick_y;
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("rightMotor: " + y2, "leftMotor: " + y1);
-            telemetry.addData("speed: ", speed);
+
             telemetry.update();
             // eg: Run wheels in tank mode (note: The joystick goes negative when pushed forwards)
             //forward movement
@@ -178,10 +175,11 @@ public class GlyphTeleOpV3 extends LinearOpMode {
 //        }
         telemetry.addData("In the turnTo Method", gyro.getHeading()+"");
         telemetry.update();
-        while((degrees - 4.6) > gyro.getHeading() && opModeIsActive()){
-            leftMotor.setPower(-0.25);
-            rightMotor.setPower(0.25);
-        }
+
+//        while((degrees - 4.6) > gyro.getHeading() && opModeIsActive()){
+//            leftMotor.setPower(-0.25);
+//            rightMotor.setPower(0.25);
+//        }
         leftMotor.setPower(0);
         rightMotor.setPower(0);
     }

@@ -33,9 +33,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 import static java.lang.Thread.sleep;
 
-@Autonomous(name="Jewel", group="Iterative Opmode")  // @Autonomous(...) is the other common choice
+@Autonomous(name="Jewel Blue", group="Iterative Opmode")  // @Autonomous(...) is the other common choice
 
-public class Jewel extends LinearOpMode {
+public class JewelBlue extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftMotor = null;
@@ -113,19 +113,19 @@ public class Jewel extends LinearOpMode {
                 String color = getColor();
                 switch(color) {
                     case "Blue": telemetry.addData("blue", "");
-                                 telemetry.update();
-                                 servo.setPosition(0.825);
-                                 Thread.sleep(2000);
-                                 servo.setPosition(1);
-                                 break OUTER;
+                        telemetry.update();
+                        servo.setPosition(0.825);
+                        Thread.sleep(2000);
+                        servo.setPosition(1);
+                        break OUTER;
                     case "Red":  telemetry.addData("red", "");
-                                 telemetry.update();
-                                 servo.setPosition(0.475);
-                                 Thread.sleep(2000);
-                                 servo.setPosition(0.3);
-                                 break OUTER;
+                        telemetry.update();
+                        servo.setPosition(0.475);
+                        Thread.sleep(2000);
+                        servo.setPosition(0.3);
+                        break OUTER;
                     default:     //recalibrate
-                                 break OUTER;
+                        break OUTER;
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
