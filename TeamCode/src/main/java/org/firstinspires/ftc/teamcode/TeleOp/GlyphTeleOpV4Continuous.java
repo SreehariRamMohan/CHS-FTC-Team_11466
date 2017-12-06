@@ -2,15 +2,17 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
 /**
  * Created by anjanbharadwaj on 12/02/17.
  */
-@TeleOp(name="Glyph TeleOp Version 3", group="Linear Opmode")  // @Autonomous(...) is the other common choice
-public class GlyphTeleOpV3 extends LinearOpMode {
+@TeleOp(name="Glyph TeleOp Version 4", group="Linear Opmode")  // @Autonomous(...) is the other common choice
+public class GlyphTeleOpV4Continuous extends LinearOpMode {
     static final double INCREMENT   = 0.001;     // amount to slew servo each CYCLE_MS cycle
     static final int    CYCLE_MS    =   50;     // period of each cycle
     static final double MAX_POS     =  0.31;     // Maximum rotational position
@@ -22,8 +24,8 @@ public class GlyphTeleOpV3 extends LinearOpMode {
     DcMotor leftMotor   = null;
     DcMotor pulleyMotor   = null;
     DcMotor rightMotor  = null;
-    Servo servo1 = null;
-    Servo servo2 = null;
+    CRServo servo1 = null;
+    CRServo servo2 = null;
     private double y1 = 0.;
     private double y2 = 0.;
     private double speed = .4;
@@ -38,8 +40,8 @@ public class GlyphTeleOpV3 extends LinearOpMode {
         leftMotor = (DcMotor) hardwareMap.dcMotor.get("left_drive");
         pulleyMotor = (DcMotor) hardwareMap.dcMotor.get("pulley");
         rightMotor = (DcMotor) hardwareMap.dcMotor.get("right_drive");
-        servo1 = (Servo) hardwareMap.servo.get("servo_left");
-        servo2 = (Servo) hardwareMap.servo.get("servo_right");
+        servo1 =  hardwareMap.crservo.get("servo_left");
+        servo2 =  hardwareMap.crservo.get("servo_right");
         // Ensure the robot it stationary, then reset the encoders and calibrate the gyro.
         leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -76,8 +78,8 @@ public class GlyphTeleOpV3 extends LinearOpMode {
         waitForStart();
         runtime.reset();
         double servo_position = 0;
-        double start1 = servo1.getPosition();
-        double start2 = servo2.getPosition();
+        //double start1 = servo1.getPosition();
+        //double start2 = servo2.getPosition();
         while(opModeIsActive()) {
             if(gamepad1.left_trigger>0.5) {
                 telemetry.addData("L trigger", "Hella");
@@ -85,7 +87,9 @@ public class GlyphTeleOpV3 extends LinearOpMode {
                 servo_position += INCREMENT;
                 //if(servo_position < MIN_POS) servo_position = MIN_POS;
                 //if(servo_position > MAX_POS) servo_position = MAX_POS;
-                servo1.setPosition(servo_position);
+                //servo1.setPosition(servo_position);
+                servo1.setDirection(CRServo.Direction.FORWARD);
+                servo1.setPower(0.25);
                 //servo2.setPosition(1 - servo_position);
             } else if(gamepad1.right_trigger>0.5) {
                 telemetry.addData("R Trigger", "Hella");
@@ -94,14 +98,18 @@ public class GlyphTeleOpV3 extends LinearOpMode {
                 //if(servo_position < MIN_POS) servo_position = MIN_POS;
                 //if(servo_position > MAX_POS) servo_position = MAX_POS;
                 //servo1.setPosition(1-servo_position);
-                servo2.setPosition(servo_position);
+                //servo2.setPosition(servo_position);
+                servo2.setDirection(CRServo.Direction.FORWARD);
+
+                servo2.setPower(0.25);
             }else if(gamepad1.left_bumper) {
                 telemetry.addData("L Bumper", "Hella");
                 telemetry.update();
                 servo_position -= (INCREMENT);
                 //if(servo_position < MIN_POS) servo_position = MIN_POS;
                 //if(servo_position > MAX_POS) servo_position = MAX_POS;
-                servo1.setPosition(1-servo_position);
+                servo1.setDirection(CRServo.Direction.REVERSE);
+                servo1.setPower(0.25);
                 //servo2.setPosition(servo_position);
             }else if(gamepad1.right_bumper) {
                 telemetry.addData("R Bumper", "Hella");
@@ -110,12 +118,13 @@ public class GlyphTeleOpV3 extends LinearOpMode {
                 //if(servo_position < MIN_POS) servo_position = MIN_POS;
                 //if(servo_position > MAX_POS) servo_position = MAX_POS;
                 //servo1.setPosition(1-servo_position);
-                servo2.setPosition(1-servo_position);
+                servo2.setDirection(CRServo.Direction.REVERSE);
+                servo2.setPower(0.25);
             } else {
                 //servo1.setDirection(Servo.Direction.FORWARD);
                 //servo2.setDirection(Servo.Direction.REVERSE);
-                servo1.setPosition(start1);
-                servo2.setPosition(start2);
+                servo1.setPower(0);
+                servo2.setPower(0);
             }
             if(gamepad1.dpad_up) {
                 pulleyMotor.setPower(0.5);
