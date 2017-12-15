@@ -3,10 +3,12 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.hardware.CRServo;
 
 /**
  * Created by sreeharirammohan on 11/13/17.
@@ -47,8 +49,8 @@ public class GlyphTeleOp extends LinearOpMode {
         gyro = (ModernRoboticsI2cGyro)hardwareMap.gyroSensor.get("sensor_gyro");
         leftMotor = (DcMotor) hardwareMap.dcMotor.get("left_drive");
         rightMotor = (DcMotor) hardwareMap.dcMotor.get("right_drive");
-        servo1 = (Servo) hardwareMap.servo.get("servo_left");
-        servo2 = (Servo) hardwareMap.servo.get("servo_right");
+        servo1 = (Servo) hardwareMap.crservo.get("servo_left");
+        servo2 = (Servo) hardwareMap.crservo.get("servo_right");
         pulleyMotor = (DcMotor) hardwareMap.dcMotor.get("pulley");
 
 
@@ -104,9 +106,6 @@ public class GlyphTeleOp extends LinearOpMode {
         double start_1 = servo1.getPosition();
         double start_2 = servo2.getPosition();
         while(opModeIsActive()) {
-
-
-
             if(gamepad1.left_trigger>0.5) {
                 telemetry.addData("A Pressed", "Hella");
                 telemetry.update();
@@ -122,14 +121,11 @@ public class GlyphTeleOp extends LinearOpMode {
                 servo1.setPosition(1-servo_position);
                 servo2.setPosition(servo_position);
             } else {
-
-                servo1.setPosition(start_1);
-                servo2.setPosition(start_2);
+                servo1.setPosition(0.5);
+                servo2.setPosition(0.5);
             }
-
             telemetry.addData("Servo position: " + servo_position, "Hella");
             telemetry.update();
-
             sleep(CYCLE_MS);
             idle();
 
@@ -149,6 +145,14 @@ public class GlyphTeleOp extends LinearOpMode {
             if(gamepad1.b){
                 leftMotor.setPower(0);
                 rightMotor.setPower(0);
+            }
+
+            if(gamepad1.dpad_up) {
+                pulleyMotor.setPower(-0.5);
+            } else if(gamepad1.dpad_down) {
+                pulleyMotor.setPower(0.5);
+            } else {
+                pulleyMotor.setPower(0);
             }
 
 

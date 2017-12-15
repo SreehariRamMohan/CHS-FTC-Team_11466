@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
- * Created by anjanbharadwaj on 12/02/17.
+ * Created by sreeharirammohan on 12/02/17.
  */
 @TeleOp(name="Glyph TeleOp Version 4", group="Linear Opmode")  // @Autonomous(...) is the other common choice
 public class GlyphTeleOpV4Continuous extends LinearOpMode {
@@ -28,7 +28,7 @@ public class GlyphTeleOpV4Continuous extends LinearOpMode {
     CRServo servo2 = null;
     private double y1 = 0.;
     private double y2 = 0.;
-    private double speed = .4;
+    private double speed = .3;
     @Override
     public void runOpMode() throws InterruptedException {
         /*
@@ -48,100 +48,70 @@ public class GlyphTeleOpV4Continuous extends LinearOpMode {
         // Send telemetry message to alert driver that we are calibrating;
         telemetry.addData(">", "Calibrating Gyro");    //
         telemetry.update();
-//        gyro.calibrate();
-//        // make sure the gyro is calibrated before continuing
-//        while (gyro.isCalibrating())  {
-//            Thread.sleep(50);
-//            idle();
-//        }
         telemetry.addData(">", "Robot Ready.");    //
         telemetry.update();
         leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        // Wait for the game to start (Display Gyro value), and reset gyro before we move..
-//        while (!isStarted()) {
-//            telemetry.addData(">", "Robot Heading = %d", gyro.getIntegratedZValue());
-//            telemetry.update();
-//            idle();
-//        }
-//        gyro.resetZAxisIntegrator();
-        // Step through each leg of the path,
-        // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        // Put a hold after each turn
         rightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         leftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        // Wait until the gyro calibration is complete
         timer.reset();
         telemetry.log().clear(); telemetry.log().add("Gyro Calibrated. Press Start.");
         telemetry.clear(); telemetry.update();
-        // Wait for the start button to be pressed
         waitForStart();
         runtime.reset();
         double servo_position = 0;
         //double start1 = servo1.getPosition();
         //double start2 = servo2.getPosition();
         while(opModeIsActive()) {
-            if(gamepad1.left_trigger>0.5) {
+            if(gamepad1.left_bumper) {
                 telemetry.addData("L trigger", "Hella");
                 telemetry.update();
                 servo_position += INCREMENT;
-                //if(servo_position < MIN_POS) servo_position = MIN_POS;
-                //if(servo_position > MAX_POS) servo_position = MAX_POS;
-                //servo1.setPosition(servo_position);
                 servo1.setDirection(CRServo.Direction.FORWARD);
                 servo1.setPower(0.25);
-                //servo2.setPosition(1 - servo_position);
+            } else if(gamepad1.left_trigger > 0.5) {
+                telemetry.addData("L Bumper", "Hella");
+                telemetry.update();
+                servo_position -= (INCREMENT);
+                servo1.setDirection(CRServo.Direction.REVERSE);
+                servo1.setPower(0.25);
+            } else {
+                servo1.setPower(0);
+                servo2.setPower(0);
+            }
+
+            if(gamepad1.right_bumper) {
+                telemetry.addData("R Bumper", "Hella");
+                telemetry.update();
+                servo_position -= (INCREMENT);
+                servo2.setDirection(CRServo.Direction.REVERSE);
+                servo2.setPower(0.25);
             } else if(gamepad1.right_trigger>0.5) {
                 telemetry.addData("R Trigger", "Hella");
                 telemetry.update();
                 servo_position += (INCREMENT);
-                //if(servo_position < MIN_POS) servo_position = MIN_POS;
-                //if(servo_position > MAX_POS) servo_position = MAX_POS;
-                //servo1.setPosition(1-servo_position);
-                //servo2.setPosition(servo_position);
                 servo2.setDirection(CRServo.Direction.FORWARD);
-
-                servo2.setPower(0.25);
-            }else if(gamepad1.left_bumper) {
-                telemetry.addData("L Bumper", "Hella");
-                telemetry.update();
-                servo_position -= (INCREMENT);
-                //if(servo_position < MIN_POS) servo_position = MIN_POS;
-                //if(servo_position > MAX_POS) servo_position = MAX_POS;
-                servo1.setDirection(CRServo.Direction.REVERSE);
-                servo1.setPower(0.25);
-                //servo2.setPosition(servo_position);
-            }else if(gamepad1.right_bumper) {
-                telemetry.addData("R Bumper", "Hella");
-                telemetry.update();
-                servo_position -= (INCREMENT);
-                //if(servo_position < MIN_POS) servo_position = MIN_POS;
-                //if(servo_position > MAX_POS) servo_position = MAX_POS;
-                //servo1.setPosition(1-servo_position);
-                servo2.setDirection(CRServo.Direction.REVERSE);
                 servo2.setPower(0.25);
             } else {
-                //servo1.setDirection(Servo.Direction.FORWARD);
-                //servo2.setDirection(Servo.Direction.REVERSE);
                 servo1.setPower(0);
                 servo2.setPower(0);
             }
+
+
             if(gamepad1.dpad_up) {
-                pulleyMotor.setPower(0.5);
+                pulleyMotor.setPower(0.25);
             } else if(gamepad1.dpad_down) {
-                pulleyMotor.setPower(-0.5);
+                pulleyMotor.setPower(-0.25);
             } else {
                 pulleyMotor.setPower(0);
             }
 
             sleep(CYCLE_MS);
             idle();
-            y1 = gamepad1.left_stick_y;
-            y2 = gamepad1.right_stick_y;
+            y1 = gamepad2.left_stick_y;
+            y2 = gamepad2.right_stick_y;
 
             telemetry.update();
-            // eg: Run wheels in tank mode (note: The joystick goes negative when pushed forwards)
-            //forward movement
             leftMotor.setPower(-y1 * speed);
             rightMotor.setPower(-y2 * speed);
             if(gamepad1.b){
@@ -179,23 +149,14 @@ public class GlyphTeleOpV4Continuous extends LinearOpMode {
     }
     public void turnTo(double degrees){
         int turnBy = -1;                 //turns clockwise
-//        if(degrees < gyro.getHeading()){
-//            turnBy *= -1;
-//        }
         telemetry.addData("In the turnTo Method", gyro.getHeading()+"");
         telemetry.update();
-
-//        while((degrees - 4.6) > gyro.getHeading() && opModeIsActive()){
-//            leftMotor.setPower(-0.25);
-//            rightMotor.setPower(0.25);
-//        }
         leftMotor.setPower(0);
         rightMotor.setPower(0);
     }
     public void wait(double seconds){
         double time = this.time;
         while(this.time - time < seconds){
-            //does nothing, purpose is to wait a certain amount of seconds
         }
     }
 }
