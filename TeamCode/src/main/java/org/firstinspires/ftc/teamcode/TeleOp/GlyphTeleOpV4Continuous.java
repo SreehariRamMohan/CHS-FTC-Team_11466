@@ -68,13 +68,13 @@ public class GlyphTeleOpV4Continuous extends LinearOpMode {
                 telemetry.update();
                 servo_position += INCREMENT;
                 servo1.setDirection(CRServo.Direction.FORWARD);
-                servo1.setPower(0.25);
+                servo1.setPower(1);
             } else if(gamepad1.left_trigger > 0.5) {
                 telemetry.addData("L Bumper", "Hella");
                 telemetry.update();
                 servo_position -= (INCREMENT);
                 servo1.setDirection(CRServo.Direction.REVERSE);
-                servo1.setPower(0.25);
+                servo1.setPower(1);
             } else {
                 servo1.setPower(0);
                 servo2.setPower(0);
@@ -98,9 +98,9 @@ public class GlyphTeleOpV4Continuous extends LinearOpMode {
             }
 
 
-            if(gamepad1.dpad_up) {
+            if(gamepad1.dpad_down) {
                 pulleyMotor.setPower(0.25);
-            } else if(gamepad1.dpad_down) {
+            } else if(gamepad1.dpad_up) {
                 pulleyMotor.setPower(-0.25);
             } else {
                 pulleyMotor.setPower(0);
