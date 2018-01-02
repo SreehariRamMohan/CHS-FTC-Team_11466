@@ -64,36 +64,36 @@ public class GlyphTeleOpV4Continuous extends LinearOpMode {
         //double start2 = servo2.getPosition();
         while(opModeIsActive()) {
             if(gamepad1.left_bumper) {
-                telemetry.addData("L trigger", "Hella");
+                telemetry.addData("L Bumper", "");
                 telemetry.update();
                 servo_position += INCREMENT;
                 servo1.setDirection(CRServo.Direction.FORWARD);
                 servo1.setPower(0.25);
             } else if(gamepad1.left_trigger > 0.5) {
-                telemetry.addData("L Bumper", "Hella");
+                telemetry.addData("L Trigger", "");
                 telemetry.update();
                 servo_position -= (INCREMENT);
                 servo1.setDirection(CRServo.Direction.REVERSE);
                 servo1.setPower(0.25);
             } else {
                 servo1.setPower(0);
-                servo2.setPower(0);
+                //servo2.setPower(0);
             }
 
             if(gamepad1.right_bumper) {
-                telemetry.addData("R Bumper", "Hella");
+                telemetry.addData("R Bumper", "");
                 telemetry.update();
                 servo_position -= (INCREMENT);
                 servo2.setDirection(CRServo.Direction.REVERSE);
                 servo2.setPower(0.25);
             } else if(gamepad1.right_trigger>0.5) {
-                telemetry.addData("R Trigger", "Hella");
+                telemetry.addData("R Trigger", "");
                 telemetry.update();
                 servo_position += (INCREMENT);
                 servo2.setDirection(CRServo.Direction.FORWARD);
                 servo2.setPower(0.25);
             } else {
-                servo1.setPower(0);
+                //servo1.setPower(0);
                 servo2.setPower(0);
             }
 
@@ -112,11 +112,14 @@ public class GlyphTeleOpV4Continuous extends LinearOpMode {
             y2 = gamepad2.right_stick_y;
 
             telemetry.update();
+
             leftMotor.setPower(-y1 * speed);
             rightMotor.setPower(-y2 * speed);
-            if(gamepad1.b){
-                leftMotor.setPower(0);
-                rightMotor.setPower(0);
+            if(gamepad2.b){
+                speed +=0.01;
+            }
+            if(gamepad2.a){
+                speed -= 0.01;
             }
         }
     }
