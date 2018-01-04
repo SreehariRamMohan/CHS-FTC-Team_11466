@@ -85,13 +85,13 @@ public class GlyphTeleOpV4Continuous extends LinearOpMode {
                 telemetry.update();
                 servo_position -= (INCREMENT);
                 servo2.setDirection(CRServo.Direction.REVERSE);
-                servo2.setPower(0.25);
+                servo2.setPower(1);
             } else if(gamepad1.right_trigger>0.5) {
                 telemetry.addData("R Trigger", "");
                 telemetry.update();
                 servo_position += (INCREMENT);
                 servo2.setDirection(CRServo.Direction.FORWARD);
-                servo2.setPower(0.25);
+                servo2.setPower(1);
             } else {
                 //servo1.setPower(0);
                 servo2.setPower(0);
