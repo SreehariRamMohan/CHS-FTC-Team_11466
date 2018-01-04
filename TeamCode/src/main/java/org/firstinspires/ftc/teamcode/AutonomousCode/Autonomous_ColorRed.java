@@ -71,7 +71,7 @@ public class Autonomous_ColorRed extends LinearOpMode {
 
 
         modernRoboticsI2cGyro = hardwareMap.get(ModernRoboticsI2cGyro.class, "sensor_gyro");
-        gyro = (IntegratingGyroscope)modernRoboticsI2cGyro;
+        gyro = (IntegratingGyroscope) modernRoboticsI2cGyro;
 
         leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -89,26 +89,26 @@ public class Autonomous_ColorRed extends LinearOpMode {
         //colorSensor = hardwareMap.colorSensor.get("name_of_color_sensor"); //we would configure the name of the color sensor later in the
         //ftc robot controller
 
-        while (modernRoboticsI2cGyro.isCalibrating())  {
-            telemetry.addData("calibrating", "%s", Math.round(timer.seconds())%2==0 ? "|.." : "..|");
+        while (modernRoboticsI2cGyro.isCalibrating()) {
+            telemetry.addData("calibrating", "%s", Math.round(timer.seconds()) % 2 == 0 ? "|.." : "..|");
             telemetry.update();
             sleep(50);
         }
 
-        telemetry.addData("Servo position: " + servo.getPosition()+"", "");
+        telemetry.addData("Servo position: " + servo.getPosition() + "", "");
         telemetry.update();
         servo.setPosition(0.25);
         Thread.sleep(2500);
 
-        while(true) {
+        while (true) {
             try {
                 String color = getColor();
-                if(color.equals("Blue")) {
+                if (color.equals("Blue")) {
                     //red is on the right
                     hitBall("Red");
                     servo.setPosition(1);
                     break;
-                } else if(color.equals("Red")) {
+                } else if (color.equals("Red")) {
                     //blue is on the left
                     hitBall("Blue");
                     servo.setPosition(1);
@@ -126,81 +126,82 @@ public class Autonomous_ColorRed extends LinearOpMode {
 
         telemetry.addData("Done with autonomous test", "");
         telemetry.update();
-
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-        parameters.vuforiaLicenseKey = "Aeaj8tD/////AAAAGW6Wh+xeOELSl05fggXCvs+JRckfIhAAgllP8tM1hJ7PMV7jHtRtTppBITGm51+X50wNJNHDXpZs7/qdm40pOq3jC/3Bgz2ikwHANjDyKdT/GMyPOKCiOYmFfbwzhRfMDC6zrh3xubGspJOJY6GGhRX2sk1q/NEmlMgLnZ/i5FHlkhIe8d12BRzSKUTolwxMzDucm21O4iruVbA/6ojfW0xLN8xzu5OX8EVclVAC5ZbTdVKe8cUysBdJAUgbATu0L42HXsGqG+McRwnhhg+A5ESeLwb7Oy23gmfq1Pkfd+5sbVrZWJD5+c8Gg1B6BIKuwHvNkZl3OgngJH5EtWgTaUV2z4OZZFtBYOnY/HGxK5jr";
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
-        this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
-        VuforiaTrackables relicTrackables = this.vuforia.loadTrackablesFromAsset("RelicVuMark");
-        VuforiaTrackable relicTemplate = relicTrackables.get(0);
-        relicTemplate.setName("relicVuMarkTemplate"); // can help in debugging; otherwise not necessary
-        telemetry.addData(">", "Press Play to start");
-        telemetry.update();
-        relicTrackables.activate();
-
-        while (opModeIsActive()) {
-
-            /**
-             * See if any of the instances of {@link relicTemplate} are currently visible.
-             * {@link RelicRecoveryVuMark} is an enum which can have the following values:
-             * UNKNOWN, LEFT, CENTER, and RIGHT. When a VuMark is visible, something other than
-             * UNKNOWN will be returned by {@link RelicRecoveryVuMark#from(VuforiaTrackable)}.
-             */
-            RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
-            if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
-                if(vuMark == RelicRecoveryVuMark.LEFT){
-                    //Pass the data "LEFT" to the glyph autonomous somehow
-                }else if(vuMark == RelicRecoveryVuMark.CENTER){
-                    //Pass the data "CENTER" to the glyph autonomous somehow
-                } else if(vuMark == RelicRecoveryVuMark.RIGHT){
-                    //Pass the data "RIGHT" to the glyph autonomous somehow
-                }
-                //This should print out which one was visible
-                telemetry.addData("VuMark", "%s visible", vuMark);
-
-                /* For fun, we also exhibit the navigational pose. In the Relic Recovery game,
-                 * it is perhaps unlikely that you will actually need to act on this pose information, but
-                 * we illustrate it nevertheless, for completeness. */
-                //TODO WE CAN PROLLY REMOVE THIS POSE STUFF
-                /* Found an instance of the template. In the actual game, you will probably
-                 * loop until this condition occurs, then move on to act accordingly depending
-                 * on which VuMark was visible. */
-                telemetry.addData("VuMark", "%s visible", vuMark);
-
-                /* For fun, we also exhibit the navigational pose. In the Relic Recovery game,
-                 * it is perhaps unlikely that you will actually need to act on this pose information, but
-                 * we illustrate it nevertheless, for completeness. */
-                OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)relicTemplate.getListener()).getPose();
-                telemetry.addData("Pose", format(pose));
-
-                /* We further illustrate how to decompose the pose into useful rotational and
-                 * translational components */
-                if (pose != null) {
-                    VectorF trans = pose.getTranslation();
-                    Orientation rot = Orientation.getOrientation(pose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
-
-                    // Extract the X, Y, and Z components of the offset of the target relative to the robot
-                    double tX = trans.get(0);
-                    double tY = trans.get(1);
-                    double tZ = trans.get(2);
-
-                    // Extract the rotational components of the target relative to the robot
-                    double rX = rot.firstAngle;
-                    double rY = rot.secondAngle;
-                    double rZ = rot.thirdAngle;
-                }
-            }
-            else {
-                telemetry.addData("VuMark", "not visible");
-            }
-
-            telemetry.update();
-        }
-
-
-
     }
+
+//        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+//        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+//        parameters.vuforiaLicenseKey = "Aeaj8tD/////AAAAGW6Wh+xeOELSl05fggXCvs+JRckfIhAAgllP8tM1hJ7PMV7jHtRtTppBITGm51+X50wNJNHDXpZs7/qdm40pOq3jC/3Bgz2ikwHANjDyKdT/GMyPOKCiOYmFfbwzhRfMDC6zrh3xubGspJOJY6GGhRX2sk1q/NEmlMgLnZ/i5FHlkhIe8d12BRzSKUTolwxMzDucm21O4iruVbA/6ojfW0xLN8xzu5OX8EVclVAC5ZbTdVKe8cUysBdJAUgbATu0L42HXsGqG+McRwnhhg+A5ESeLwb7Oy23gmfq1Pkfd+5sbVrZWJD5+c8Gg1B6BIKuwHvNkZl3OgngJH5EtWgTaUV2z4OZZFtBYOnY/HGxK5jr";
+//        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+//        this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
+//        VuforiaTrackables relicTrackables = this.vuforia.loadTrackablesFromAsset("RelicVuMark");
+//        VuforiaTrackable relicTemplate = relicTrackables.get(0);
+//        relicTemplate.setName("relicVuMarkTemplate"); // can help in debugging; otherwise not necessary
+//        telemetry.addData(">", "Press Play to start");
+//        telemetry.update();
+//        relicTrackables.activate();
+//
+//        while (opModeIsActive()) {
+//
+//            /**
+//             * See if any of the instances of {@link relicTemplate} are currently visible.
+//             * {@link RelicRecoveryVuMark} is an enum which can have the following values:
+//             * UNKNOWN, LEFT, CENTER, and RIGHT. When a VuMark is visible, something other than
+//             * UNKNOWN will be returned by {@link RelicRecoveryVuMark#from(VuforiaTrackable)}.
+//             */
+//            RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
+//            if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
+//                if(vuMark == RelicRecoveryVuMark.LEFT){
+//                    //Pass the data "LEFT" to the glyph autonomous somehow
+//                }else if(vuMark == RelicRecoveryVuMark.CENTER){
+//                    //Pass the data "CENTER" to the glyph autonomous somehow
+//                } else if(vuMark == RelicRecoveryVuMark.RIGHT){
+//                    //Pass the data "RIGHT" to the glyph autonomous somehow
+//                }
+//                //This should print out which one was visible
+//                telemetry.addData("VuMark", "%s visible", vuMark);
+//
+//                /* For fun, we also exhibit the navigational pose. In the Relic Recovery game,
+//                 * it is perhaps unlikely that you will actually need to act on this pose information, but
+//                 * we illustrate it nevertheless, for completeness. */
+//                //TODO WE CAN PROLLY REMOVE THIS POSE STUFF
+//                /* Found an instance of the template. In the actual game, you will probably
+//                 * loop until this condition occurs, then move on to act accordingly depending
+//                 * on which VuMark was visible. */
+//                telemetry.addData("VuMark", "%s visible", vuMark);
+//
+//                /* For fun, we also exhibit the navigational pose. In the Relic Recovery game,
+//                 * it is perhaps unlikely that you will actually need to act on this pose information, but
+//                 * we illustrate it nevertheless, for completeness. */
+//                OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)relicTemplate.getListener()).getPose();
+//                telemetry.addData("Pose", format(pose));
+//
+//                /* We further illustrate how to decompose the pose into useful rotational and
+//                 * translational components */
+//                if (pose != null) {
+//                    VectorF trans = pose.getTranslation();
+//                    Orientation rot = Orientation.getOrientation(pose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+//
+//                    // Extract the X, Y, and Z components of the offset of the target relative to the robot
+//                    double tX = trans.get(0);
+//                    double tY = trans.get(1);
+//                    double tZ = trans.get(2);
+//
+//                    // Extract the rotational components of the target relative to the robot
+//                    double rX = rot.firstAngle;
+//                    double rY = rot.secondAngle;
+//                    double rZ = rot.thirdAngle;
+//                }
+//            }
+//            else {
+//                telemetry.addData("VuMark", "not visible");
+//            }
+//
+//            telemetry.update();
+//        }
+//
+//
+//
+//    }
 
     public void driveForward(double power, int distance){
         leftMotor.setMode(DcMotor.RunMode.RESET_ENCODERS);
