@@ -213,14 +213,17 @@ public class Autonomous_ColorBlue extends LinearOpMode {
         double ratio = colors.red / colors.blue;
         if(ratio >= 0.15 && ratio <= 1.3) {
             telemetry.addLine("Blue");
+            telemetry.update();
             return "Blue";
 
         } else if(ratio > 1.7 && ratio <= 3.5) {
             telemetry.addLine("Red");
+            telemetry.update();
             return "Red";
 
         } else {
             telemetry.addLine("Neither");
+            telemetry.update();
             return "Neither";
         }
 
