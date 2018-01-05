@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.AutonomousCode;
 
 import android.graphics.Color;
 import android.view.View;
-
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -15,7 +14,6 @@ import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.SwitchableLight;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 import static java.lang.Thread.sleep;
@@ -66,9 +64,7 @@ public class Autonomous_ColorBlue extends LinearOpMode {
 
         leftMotor.setDirection(DcMotor.Direction.FORWARD);
 
-        //Right motor is reverse because Praneeth put right motor on backwards :/
         rightMotor.setDirection(DcMotor.Direction.REVERSE);
-//        servo.setPosition(90);
 
         while (modernRoboticsI2cGyro.isCalibrating())  {
             telemetry.addData("calibrating", "%s", Math.round(timer.seconds())%2==0 ? "|.." : "..|");
@@ -101,8 +97,27 @@ public class Autonomous_ColorBlue extends LinearOpMode {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
         }
+
+        //move toward the glyph box
+        driveForward(1, convert_to_REV_distance(6, 5));
+
+        public void turnTo(double degrees){
+            int turnBy = -1;                 //turns clockwise
+
+
+            telemetry.addData("In the turnTo Method", gyro.getHeading+"");
+            telemetry.update();
+
+            while((degrees - 4.6) > gyro.getHeading() && opModeIsActive()){
+                leftMotor.setPower(-0.25);
+                rightMotor.setPower(0.25);
+            }
+
+            leftMotor.setPower(0);
+            rightMotor.setPower(0);
+        }
+
 
 
         telemetry.addData("Done with autonomous test", "");
@@ -226,6 +241,7 @@ public class Autonomous_ColorBlue extends LinearOpMode {
 
 
     }
+
     String formatRaw(int rawValue) {
         return String.format("%d", rawValue);
     }
