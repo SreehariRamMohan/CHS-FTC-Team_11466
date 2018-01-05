@@ -60,8 +60,10 @@ public class GlyphTeleOpV4Continuous extends LinearOpMode {
         waitForStart();
         runtime.reset();
         double servo_position = 0;
+
         //double start1 = servo1.getPosition();
         //double start2 = servo2.getPosition();
+
         while(opModeIsActive()) {
             if(gamepad1.left_bumper) {
                 telemetry.addData("L Bumper", "");
