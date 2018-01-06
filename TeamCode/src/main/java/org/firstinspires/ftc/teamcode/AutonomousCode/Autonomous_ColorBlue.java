@@ -114,6 +114,7 @@ public class Autonomous_ColorBlue extends LinearOpMode {
         driveForward(0.25, convert_to_REV_distance(6,0));
         telemetry.addData("Done with autonomous test", "");
         telemetry.update();
+
     }
 
     private void openClaw() {
