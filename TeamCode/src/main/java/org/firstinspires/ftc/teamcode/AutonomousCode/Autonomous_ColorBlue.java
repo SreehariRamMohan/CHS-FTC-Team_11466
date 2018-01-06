@@ -85,6 +85,7 @@ public class Autonomous_ColorBlue extends LinearOpMode {
         servo.setPosition(0.25);
         Thread.sleep(2500);
 
+
         while(true) {
             telemetry.addData("In while loop","while");
             telemetry.update();
