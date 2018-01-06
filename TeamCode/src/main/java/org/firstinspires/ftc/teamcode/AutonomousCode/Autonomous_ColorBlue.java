@@ -108,11 +108,27 @@ public class Autonomous_ColorBlue extends LinearOpMode {
         }
         //move towards glyph
         driveForward(0.5, convert_to_REV_distance(6,5));
+
         turnTo(90);
+
+        driveForward(0.25, convert_to_REV_distance(6, 1));
+
+        openClaw();
+
+        driveForward(0.25, convert_to_REV_distance(6, 0));
+
+        driveForward(-0.25, convert_to_REV_distance(0, 2));
+
+
+
+
 
 
         telemetry.addData("Done with autonomous test", "");
         telemetry.update();
+    }
+
+    private void openClaw() {
     }
 
     public void driveForward(double power, int distance){
