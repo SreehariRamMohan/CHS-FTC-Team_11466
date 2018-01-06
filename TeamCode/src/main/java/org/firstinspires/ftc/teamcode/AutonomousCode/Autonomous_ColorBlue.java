@@ -72,12 +72,13 @@ public class Autonomous_ColorBlue extends LinearOpMode {
 
         //colorSensor = hardwareMap.colorSensor.get("name_of_color_sensor"); //we would configure the name of the color sensor later in the
         //ftc robot controller
+        gyro.calibrate();
+        while (gyro.isCalibrating())  {
+            telemetry.addData("calibrating", "%s", Math.round(timer.seconds())%2==0 ? "|.." : "..|");
+            telemetry.update();
+            sleep(50);
+        }
 
-//        while (modernRoboticsI2cGyro.isCalibrating())  {
-//            telemetry.addData("calibrating", "%s", Math.round(timer.seconds())%2==0 ? "|.." : "..|");
-//            telemetry.update();
-//            sleep(50);
-//        }
 
         telemetry.addData("Servo position: " + servo.getPosition()+"", "");
         telemetry.update();
@@ -85,6 +86,8 @@ public class Autonomous_ColorBlue extends LinearOpMode {
         Thread.sleep(2500);
 
         while(true) {
+            telemetry.addData("In while loop","while");
+            telemetry.update();
             try {
                 String color = getColor();
                 if(color.equals("Blue")) {
