@@ -106,18 +106,22 @@ public class Autonomous_ColorBlue extends LinearOpMode {
             }
 
         }
+
         //move towards glyph
         driveForward(0.5, convert_to_REV_distance(6,5));
 
+        //turn facing the glyph box
         turnTo(90);
 
+        //move inward
         driveForward(0.25, convert_to_REV_distance(6, 1));
 
+        //open claw
         openClaw();
 
+        //bash the glyph in to the box
         driveForward(0.25, convert_to_REV_distance(6, 0));
 
-        driveForward(-0.25, convert_to_REV_distance(0, 2));
 
 
 
