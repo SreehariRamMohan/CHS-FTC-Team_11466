@@ -8,18 +8,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.IntegratingGyroscope;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.SwitchableLight;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-
-import static java.lang.Thread.sleep;
-
 
 @TeleOp(name = "Blue", group = "Autonomous Version:")
 
@@ -54,7 +48,6 @@ public class Autonomous_ColorBlue extends LinearOpMode {
         servo = hardwareMap.get(Servo.class, "servo_jewel");
 
 
-//        modernRoboticsI2cGyro = hardwareMap.get(ModernRoboticsI2cGyro.class, "sensor_gyro");
         gyro = hardwareMap.get(ModernRoboticsI2cGyro.class, "sensor_gyro");
 
         leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -66,18 +59,8 @@ public class Autonomous_ColorBlue extends LinearOpMode {
 
         leftMotor.setDirection(DcMotor.Direction.FORWARD);
 
-        //Right motor is reverse because Praneeth put right motor on backwards :/
         rightMotor.setDirection(DcMotor.Direction.REVERSE);
-//        servo.setPosition(90);
 
-        //colorSensor = hardwareMap.colorSensor.get("name_of_color_sensor"); //we would configure the name of the color sensor later in the
-        //ftc robot controller
-
-//        while (modernRoboticsI2cGyro.isCalibrating())  {
-//            telemetry.addData("calibrating", "%s", Math.round(timer.seconds())%2==0 ? "|.." : "..|");
-//            telemetry.update();
-//            sleep(50);
-//        }
 
         telemetry.addData("Servo position: " + servo.getPosition()+"", "");
         telemetry.update();
@@ -152,10 +135,6 @@ public class Autonomous_ColorBlue extends LinearOpMode {
     public void turnTo(double degrees){
         int turnBy = -1;                 //turns clockwise
 
-//        if(degrees < gyro.getHeading()){
-//            turnBy *= -1;
-//        }
-
         telemetry.addData("In the turnTo Method", gyro.getHeading()+"");
         telemetry.update();
 
@@ -175,6 +154,7 @@ public class Autonomous_ColorBlue extends LinearOpMode {
         leftMotor.setPower(power);
         rightMotor.setPower(-power);
     }
+
     //Pass in right for right, left for left
     public void hitBall(String direction){
 
@@ -189,8 +169,6 @@ public class Autonomous_ColorBlue extends LinearOpMode {
             driveForward(0.25, convert_to_REV_distance(35,0));
             leftMotor.setDirection(DcMotor.Direction.FORWARD);
             rightMotor.setDirection(DcMotor.Direction.REVERSE);
-            //leftMotor.setPower(-1);
-            //rightMotor.setPower(-1);
         }
 
     }
