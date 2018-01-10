@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IntegratingGyroscope;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.SwitchableLight;
@@ -156,6 +157,8 @@ public class JewelRed extends LinearOpMode {
 
         telemetry.addLine("YAY");
         telemetry.update();
+        turnTo(-90);
+        driveForward(0.33, convert_to_REV_distance(12, 0));
 
 //        String column = scanVuMark();
 //
@@ -260,21 +263,27 @@ public class JewelRed extends LinearOpMode {
 
         double ratio = colors.red / colors.blue;
 
+        telemetry.addData("ratio", ratio);
+        telemetry.update();
+
         if(ratio >= 0.15 && ratio <= 1.3) {
             telemetry.addLine("Blue");
-            //telemetry.update();
+            telemetry.update();
             return "Blue";
 
         } else if(ratio > 1.7 && ratio <= 3.5) {
             telemetry.addLine("Red");
-            //telemetry.update();
+            telemetry.update();
             return "Red";
 
         } else {
             telemetry.addLine("Neither");
-            //telemetry.update();
+            telemetry.update();
             return "Neither";
         }
+
+
+
 
 
     }

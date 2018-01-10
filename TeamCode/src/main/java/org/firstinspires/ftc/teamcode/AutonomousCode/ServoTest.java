@@ -54,8 +54,8 @@ import static java.lang.Thread.sleep;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
-@Autonomous(name = "Concept: Scan Servo", group = "Concept")
-@Disabled
+@Autonomous(name = "Servo Test", group = "Linear Opmode")
+
 public class ServoTest extends LinearOpMode {
 
     static final double INCREMENT   = 0.01;     // amount to slew servo each CYCLE_MS cycle
