@@ -96,14 +96,18 @@ public class Autonomous_ColorRed extends LinearOpMode {
                     //red is on the right
                     hitBall("Blue");
                     servo.setPosition(1);
+                    telemetry.addData("Blue", "blue");
                     break;
                 } else if(color.equals("Red")) {
                     //blue is on the left
                     hitBall("Red");
                     servo.setPosition(1);
+                    telemetry.addData("Red", "red");
                     break;
                 } else {
+                    telemetry.addData("Neither", "neither");
                     break;
+
                     //recalibrate
                 }
             } catch (InterruptedException e) {
@@ -111,14 +115,14 @@ public class Autonomous_ColorRed extends LinearOpMode {
             }
 
         }
+        telemetry.update();
         //move towards glyph
         driveForward(0.5, convert_to_REV_distance(6,1));
         turnTo(90);
         driveForward(0.25, convert_to_REV_distance(6,0));
         openClaw();
         driveForward(0.25, convert_to_REV_distance(6,0));
-        telemetry.addData("Done with autonomous test", "");
-        telemetry.update();
+
 
     }
 
