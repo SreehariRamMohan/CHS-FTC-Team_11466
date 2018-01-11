@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.view.View;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -21,7 +22,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import static java.lang.Thread.sleep;
 
 
-@TeleOp(name = "Blue", group = "Autonomous Version:")
+@Autonomous(name = "Blue", group = "Autonomous Version:")
 
 public class Autonomous_ColorBlue extends LinearOpMode {
     /* Declare OpMode members. */

@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.view.View;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -16,23 +17,12 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.SwitchableLight;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 import static java.lang.Thread.sleep;
 
 
-@TeleOp(name = "Red", group = "Autonomous Version:")
+@Autonomous(name = "Red", group = "Autonomous Version:")
 
 public class Autonomous_ColorRed extends LinearOpMode {
     /* Declare OpMode members. */
@@ -43,14 +33,9 @@ public class Autonomous_ColorRed extends LinearOpMode {
     View relativeLayout;
     private double start_time;
     private int TICKS_PER_REVOLUTION = 1120;
-    IntegratingGyroscope gyro;
+    ModernRoboticsI2cGyro gyro;
     ModernRoboticsI2cGyro modernRoboticsI2cGyro;
     ElapsedTime timer = new ElapsedTime();
-
-    //attributes for vuforia
-    public static final String TAG = "Vuforia VuMark Sample";
-    OpenGLMatrix lastLocation = null;
-    VuforiaLocalizer vuforia;
 
     static final double INCREMENT   = 0.01;     // amount to slew servo each CYCLE_MS cycle
     static final int    CYCLE_MS    =   50;     // period of each cycle
@@ -70,8 +55,8 @@ public class Autonomous_ColorRed extends LinearOpMode {
         servo = hardwareMap.get(Servo.class, "servo_jewel");
 
 
-        modernRoboticsI2cGyro = hardwareMap.get(ModernRoboticsI2cGyro.class, "sensor_gyro");
-        gyro = (IntegratingGyroscope) modernRoboticsI2cGyro;
+//        modernRoboticsI2cGyro = hardwareMap.get(ModernRoboticsI2cGyro.class, "sensor_gyro");
+        gyro = hardwareMap.get(ModernRoboticsI2cGyro.class, "sensor_gyro");
 
         leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -86,29 +71,35 @@ public class Autonomous_ColorRed extends LinearOpMode {
         rightMotor.setDirection(DcMotor.Direction.REVERSE);
 //        servo.setPosition(90);
 
-
-        while (modernRoboticsI2cGyro.isCalibrating()) {
-            telemetry.addData("calibrating", "%s", Math.round(timer.seconds()) % 2 == 0 ? "|.." : "..|");
+        //colorSensor = hardwareMap.colorSensor.get("name_of_color_sensor"); //we would configure the name of the color sensor later in the
+        //ftc robot controller
+        gyro.calibrate();
+        while (gyro.isCalibrating())  {
+            telemetry.addData("calibrating", "%s", Math.round(timer.seconds())%2==0 ? "|.." : "..|");
             telemetry.update();
             sleep(50);
         }
 
-        telemetry.addData("Servo position: " + servo.getPosition() + "", "");
+
+        telemetry.addData("Servo position: " + servo.getPosition()+"", "");
         telemetry.update();
         servo.setPosition(0.25);
         Thread.sleep(2500);
 
-        while (true) {
+
+        while(true) {
+            telemetry.addData("In while loop","while");
+            telemetry.update();
             try {
                 String color = getColor();
-                if (color.equals("Blue")) {
+                if(color.equals("Blue")) {
                     //red is on the right
-                    hitBall("Red");
+                    hitBall("Blue");
                     servo.setPosition(1);
                     break;
-                } else if (color.equals("Red")) {
+                } else if(color.equals("Red")) {
                     //blue is on the left
-                    hitBall("Blue");
+                    hitBall("Red");
                     servo.setPosition(1);
                     break;
                 } else {
@@ -120,10 +111,19 @@ public class Autonomous_ColorRed extends LinearOpMode {
             }
 
         }
-
-
+        //move towards glyph
+        driveForward(0.5, convert_to_REV_distance(6,5));
+        turnTo(90);
+        driveForward(0.25, convert_to_REV_distance(6,1));
+        openClaw();
+        driveForward(0.25, convert_to_REV_distance(6,0));
         telemetry.addData("Done with autonomous test", "");
         telemetry.update();
+
+    }
+
+    private void openClaw() {
+
     }
 
     public void driveForward(double power, int distance){
@@ -154,6 +154,24 @@ public class Autonomous_ColorRed extends LinearOpMode {
         leftMotor.setPower(power);
         rightMotor.setPower(power);
     }
+    public void turnTo(double degrees){
+        int turnBy = -1;                 //turns clockwise
+
+//        if(degrees < gyro.getHeading()){
+//            turnBy *= -1;
+//        }
+
+        telemetry.addData("In the turnTo Method", gyro.getHeading()+"");
+        telemetry.update();
+
+        while((degrees - 4.6) > gyro.getHeading() && opModeIsActive()){
+            leftMotor.setPower(-0.25);
+            rightMotor.setPower(0.25);
+        }
+
+        leftMotor.setPower(0);
+        rightMotor.setPower(0);
+    }
     public void TurnLeft(double power){
         leftMotor.setPower(-power);
         rightMotor.setPower(power);
@@ -166,14 +184,14 @@ public class Autonomous_ColorRed extends LinearOpMode {
     public void hitBall(String direction){
 
         //move the servo the correct amount of degress.
-        if(direction.equals("Blue")){
+        if(direction.equals("Red")){
             leftMotor.setPower(1);
             rightMotor.setPower(1);
-            driveForward(0.25, convert_to_REV_distance(35,0));
-        } else if(direction.equals("Red")){
+            driveForward(0.25, convert_to_REV_distance(10,0));
+        } else if(direction.equals("Blue")){
             leftMotor.setDirection(DcMotor.Direction.REVERSE);
             rightMotor.setDirection(DcMotor.Direction.FORWARD);
-            driveForward(0.25, convert_to_REV_distance(35,0));
+            driveForward(0.25, convert_to_REV_distance(10,0));
             leftMotor.setDirection(DcMotor.Direction.FORWARD);
             rightMotor.setDirection(DcMotor.Direction.REVERSE);
             //leftMotor.setPower(-1);
@@ -227,20 +245,22 @@ public class Autonomous_ColorRed extends LinearOpMode {
         double ratio = colors.red / colors.blue;
         if(ratio >= 0.15 && ratio <= 1.3) {
             telemetry.addLine("Blue");
+            telemetry.update();
             return "Blue";
 
         } else if(ratio > 1.7 && ratio <= 3.5) {
             telemetry.addLine("Red");
+            telemetry.update();
             return "Red";
 
         } else {
             telemetry.addLine("Neither");
+            telemetry.update();
             return "Neither";
         }
 
 
     }
-
     String formatRaw(int rawValue) {
         return String.format("%d", rawValue);
     }
@@ -253,8 +273,5 @@ public class Autonomous_ColorRed extends LinearOpMode {
         return String.format("%.3f", rate);
     }
 
-    String format(OpenGLMatrix transformationMatrix) {
-        return (transformationMatrix != null) ? transformationMatrix.formatAsTransform() : "null";
-    }
-
 }
+
