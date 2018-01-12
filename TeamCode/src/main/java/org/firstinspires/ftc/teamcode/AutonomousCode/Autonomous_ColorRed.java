@@ -191,11 +191,11 @@ public class Autonomous_ColorRed extends LinearOpMode {
         if(direction.equals("Red")){
             leftMotor.setPower(1);
             rightMotor.setPower(1);
-            driveForward(0.25, convert_to_REV_distance(10,0));
+            driveForward(0.25, convert_to_REV_distance(35,0));
         } else if(direction.equals("Blue")){
             leftMotor.setDirection(DcMotor.Direction.REVERSE);
             rightMotor.setDirection(DcMotor.Direction.FORWARD);
-            driveForward(0.25, convert_to_REV_distance(10,0));
+            driveForward(0.25, convert_to_REV_distance(55,0));
             leftMotor.setDirection(DcMotor.Direction.FORWARD);
             rightMotor.setDirection(DcMotor.Direction.REVERSE);
             //leftMotor.setPower(-1);
