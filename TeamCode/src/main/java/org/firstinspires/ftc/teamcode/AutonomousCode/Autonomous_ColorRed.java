@@ -55,7 +55,6 @@ public class Autonomous_ColorRed extends LinearOpMode {
         servo = hardwareMap.get(Servo.class, "servo_jewel");
 
 
-//        modernRoboticsI2cGyro = hardwareMap.get(ModernRoboticsI2cGyro.class, "sensor_gyro");
         gyro = hardwareMap.get(ModernRoboticsI2cGyro.class, "sensor_gyro");
 
         leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -122,6 +121,8 @@ public class Autonomous_ColorRed extends LinearOpMode {
         driveForward(0.25, convert_to_REV_distance(6,0));
         openClaw();
         driveForward(0.25, convert_to_REV_distance(6,0));
+        telemetry.addData("Done with autonomous Red test", "");
+        telemetry.update();
 
 
     }

@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IntegratingGyroscope;
@@ -37,6 +38,11 @@ public class Autonomous_ColorBlue extends LinearOpMode {
     ModernRoboticsI2cGyro modernRoboticsI2cGyro;
     ElapsedTime timer = new ElapsedTime();
 
+    CRServo servo1 = null;
+    CRServo servo2 = null;
+    double servo_position = 0;
+
+
     static final double INCREMENT   = 0.01;     // amount to slew servo each CYCLE_MS cycle
     static final int    CYCLE_MS    =   50;     // period of each cycle
     static final double MAX_POS     =  1.0;     // Maximum rotational position
@@ -53,27 +59,22 @@ public class Autonomous_ColorBlue extends LinearOpMode {
         leftMotor = hardwareMap.dcMotor.get("left_drive"); //we would configure this in FTC Robot Controller app
         rightMotor = hardwareMap.dcMotor.get("right_drive");
         servo = hardwareMap.get(Servo.class, "servo_jewel");
-
-
-//        modernRoboticsI2cGyro = hardwareMap.get(ModernRoboticsI2cGyro.class, "sensor_gyro");
         gyro = hardwareMap.get(ModernRoboticsI2cGyro.class, "sensor_gyro");
-
         leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
         leftMotor.getCurrentPosition(); //gets current pos
         leftMotor.getTargetPosition(); //use with runToPosition (set where u want ot go to)
         leftMotor.isBusy(); //tells you if it is still running to the position that u set
-
         leftMotor.setDirection(DcMotor.Direction.FORWARD);
-
-        //Right motor is reverse because Praneeth put right motor on backwards :/
         rightMotor.setDirection(DcMotor.Direction.REVERSE);
-//        servo.setPosition(90);
-
-        //colorSensor = hardwareMap.colorSensor.get("name_of_color_sensor"); //we would configure the name of the color sensor later in the
-        //ftc robot controller
         gyro.calibrate();
+
+
+        //initialize the serovs for the claw
+        servo1 =  hardwareMap.crservo.get("servo_left");
+        servo2 =  hardwareMap.crservo.get("servo_right");
+
+
         while (gyro.isCalibrating())  {
             telemetry.addData("calibrating", "%s", Math.round(timer.seconds())%2==0 ? "|.." : "..|");
             telemetry.update();
@@ -117,12 +118,26 @@ public class Autonomous_ColorBlue extends LinearOpMode {
         driveForward(0.25, convert_to_REV_distance(6,0));
         openClaw();
         driveForward(0.25, convert_to_REV_distance(6,0));
-        telemetry.addData("Done with autonomous test", "");
+        telemetry.addData("Done with autonomous Blue test", "");
         telemetry.update();
+
 
     }
 
     private void openClaw() {
+
+        while(servo_position < 0.5) {
+
+        }
+
+        servo_position -= (INCREMENT);
+        servo2.setDirection(CRServo.Direction.REVERSE);
+        servo2.setPower(1);
+        telemetry.addData("R Trigger", "");
+        telemetry.update();
+        servo_position += (INCREMENT);
+        servo2.setDirection(CRServo.Direction.FORWARD);
+        servo2.setPower(1);
 
     }
 

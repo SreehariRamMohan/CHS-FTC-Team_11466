@@ -100,14 +100,14 @@ public class SensorColor extends LinearOpMode {
       float max = Math.max(Math.max(Math.max(colors.red, colors.green), colors.blue), colors.alpha);
 
       double ratio = colors.red / colors.blue;
-      if(ratio >= 0.15 && ratio <= 1.3) {
-        telemetry.addLine("Blue");
+      if(ratio >= 0.15 && ratio <= 1.6) {
+        telemetry.addLine("Blue: " + ratio);
 
-      } else if(ratio > 1.7 && ratio <= 3.5) {
-        telemetry.addLine("Red");
+      } else if(ratio > 2.25 && ratio <= 2.7) {
+        telemetry.addLine("Red: " + ratio);
 
       } else {
-        telemetry.addLine("Neither");
+        telemetry.addLine("Neither: " + ratio);
       }
       telemetry.update();
       Color.RGBToHSV(Color.red(color), Color.green(color), Color.blue(color), hsvValues);
