@@ -16,7 +16,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 
-@Autonomous(name = "Blue", group = "Autonomous Version:")
+@Autonomous(name = "Claw", group = "Autonomous Version:")
 
 public class Autonomous_Claw_test extends LinearOpMode {
     /* Declare OpMode members. */
@@ -77,7 +77,6 @@ public class Autonomous_Claw_test extends LinearOpMode {
 
         telemetry.addData("Servo position: " + servo.getPosition()+"", "");
         telemetry.update();
-        servo.setPosition(0.25);
         Thread.sleep(2500);
 
 

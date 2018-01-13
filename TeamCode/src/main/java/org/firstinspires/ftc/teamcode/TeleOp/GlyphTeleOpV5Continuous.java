@@ -117,6 +117,14 @@ public class GlyphTeleOpV5Continuous extends LinearOpMode {
             if(gamepad2.a){
                 speed -= 0.01;
             }
+
+
+            if(gamepad2.x) {
+                Servo servo = hardwareMap.get(Servo.class, "servo_jewel");
+                servo.setPosition(0);
+            }
+
+
         }
     }
 
