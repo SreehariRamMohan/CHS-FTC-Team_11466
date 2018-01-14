@@ -20,9 +20,11 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 
-@Autonomous(name = "Red6", group = "Autonomous Version:")
 
-public class Autonomous_ColorBlue6 extends LinearOpMode {
+
+@Autonomous(name = "Red7", group = "Autonomous Version:")
+
+public class Autonomous_ColorBlue7 extends LinearOpMode {
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftMotor = null;
@@ -38,7 +40,6 @@ public class Autonomous_ColorBlue6 extends LinearOpMode {
     CRServo servo1 = null;
     CRServo servo2 = null;
     double servo_position = 0;
-    double position1 = 0;
 
 
     static final double INCREMENT   = 0.01;     // amount to slew servo each CYCLE_MS cycle
@@ -67,8 +68,6 @@ public class Autonomous_ColorBlue6 extends LinearOpMode {
         rightMotor.setDirection(DcMotor.Direction.REVERSE);
         gyro.calibrate();
 
-        position1 = servo.getPosition();
-
         while (gyro.isCalibrating())  {
             telemetry.addData("calibrating", "%s", Math.round(timer.seconds())%2==0 ? "|.." : "..|");
             telemetry.update();
@@ -79,6 +78,7 @@ public class Autonomous_ColorBlue6 extends LinearOpMode {
         //initialize the serovs for the claw
         servo1 =  hardwareMap.crservo.get("servo_left");
         servo2 =  hardwareMap.crservo.get("servo_right");
+
 
 
         telemetry.addData("Servo position: " + servo.getPosition()+"", "");
@@ -113,6 +113,10 @@ public class Autonomous_ColorBlue6 extends LinearOpMode {
         }
         telemetry.addData("Out of while - Moving servo final time", "");
         telemetry.update();
+        servo.setPosition(0);
+        telemetry.addData("Going to sleep", "");
+        telemetry.update();
+        sleep(25000);
         //move towards glyph
 //        driveForward(0.5, convert_to_REV_distance(6,1));
 //        turnTo(90);
@@ -202,13 +206,7 @@ public class Autonomous_ColorBlue6 extends LinearOpMode {
         //move the servo the correct amount of degress.
         if(direction.equals("Blue")){
 
-            driveForward(0.25, convert_to_REV_distance(5,0));
-            servo.setDirection(Servo.Direction.FORWARD);
-            servo.setPosition(position1);
-            sleep(2500);
-            driveForward(0.25, convert_to_REV_distance(20,0));
-
-
+            driveForward(0.25, convert_to_REV_distance(25,0));
         } else if(direction.equals("Red")){
             leftMotor.setDirection(DcMotor.Direction.REVERSE);
             rightMotor.setDirection(DcMotor.Direction.FORWARD);
