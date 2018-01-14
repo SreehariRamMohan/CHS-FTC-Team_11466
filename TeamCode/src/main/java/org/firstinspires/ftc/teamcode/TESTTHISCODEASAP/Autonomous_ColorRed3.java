@@ -1,4 +1,4 @@
-//This code changes the while loop to check if opModeIsActive
+//add idle() at the end of the opmode.
 package org.firstinspires.ftc.teamcode.TESTTHISCODEASAP;
 
 import android.graphics.Color;
@@ -128,6 +128,7 @@ public class Autonomous_ColorRed3 extends LinearOpMode {
         telemetry.addData("Done with autonomous Red test", "");
         telemetry.update();
 
+        idle();
 
     }
 
