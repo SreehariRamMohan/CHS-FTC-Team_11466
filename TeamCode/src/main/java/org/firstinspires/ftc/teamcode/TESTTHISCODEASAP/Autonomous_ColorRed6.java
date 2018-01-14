@@ -108,7 +108,6 @@ public class Autonomous_ColorRed6 extends LinearOpMode {
         }
         telemetry.addData("Out of while - Moving servo final time", "");
         telemetry.update();
-        servo.setPosition(0);
 
 
         telemetry.update();
@@ -142,6 +141,13 @@ public class Autonomous_ColorRed6 extends LinearOpMode {
 
         }
         StopDriving();
+
+        servo.setPosition(0.75);
+        try {
+            Thread.sleep(2500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

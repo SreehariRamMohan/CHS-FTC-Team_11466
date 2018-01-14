@@ -35,51 +35,47 @@ public class Autonomous_ColorBlue6 extends LinearOpMode {
     ModernRoboticsI2cGyro modernRoboticsI2cGyro;
     ElapsedTime timer = new ElapsedTime();
 
-    CRServo servo1 = null;
-    CRServo servo2 = null;
-    double servo_position = 0;
-    double position1 = 0;
-
-
     static final double INCREMENT   = 0.01;     // amount to slew servo each CYCLE_MS cycle
     static final int    CYCLE_MS    =   50;     // period of each cycle
     static final double MAX_POS     =  1.0;     // Maximum rotational position
     static final double MIN_POS     =  0.0;     // Minimum rotational position
-
 
     // Define class members
     Servo servo;
     double  position = 0; // Start at halfway position
     boolean rampUp = true;
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() throws InterruptedException{
         telemetry.addData("Status", "Initialized");
 
         leftMotor = hardwareMap.dcMotor.get("left_drive"); //we would configure this in FTC Robot Controller app
         rightMotor = hardwareMap.dcMotor.get("right_drive");
         servo = hardwareMap.get(Servo.class, "servo_jewel");
+
+
         gyro = hardwareMap.get(ModernRoboticsI2cGyro.class, "sensor_gyro");
+
         leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         leftMotor.getCurrentPosition(); //gets current pos
         leftMotor.getTargetPosition(); //use with runToPosition (set where u want ot go to)
         leftMotor.isBusy(); //tells you if it is still running to the position that u set
+
         leftMotor.setDirection(DcMotor.Direction.FORWARD);
+
+        //Right motor is reverse because Praneeth put right motor on backwards :/
         rightMotor.setDirection(DcMotor.Direction.REVERSE);
+//        servo.setPosition(90);
+
+        //colorSensor = hardwareMap.colorSensor.get("name_of_color_sensor"); //we would configure the name of the color sensor later in the
+        //ftc robot controller
         gyro.calibrate();
-
-        position1 = servo.getPosition();
-
         while (gyro.isCalibrating())  {
             telemetry.addData("calibrating", "%s", Math.round(timer.seconds())%2==0 ? "|.." : "..|");
             telemetry.update();
             sleep(50);
         }
-
-
-        //initialize the serovs for the claw
-        servo1 =  hardwareMap.crservo.get("servo_left");
-        servo2 =  hardwareMap.crservo.get("servo_right");
 
 
         telemetry.addData("Servo position: " + servo.getPosition()+"", "");
@@ -114,32 +110,22 @@ public class Autonomous_ColorBlue6 extends LinearOpMode {
         }
         telemetry.addData("Out of while - Moving servo final time", "");
         telemetry.update();
+
+
+        telemetry.update();
         //move towards glyph
 //        driveForward(0.5, convert_to_REV_distance(6,1));
 //        turnTo(90);
 //        driveForward(0.25, convert_to_REV_distance(6,0));
 //        openClaw();
 //        driveForward(0.25, convert_to_REV_distance(6,0));
-        telemetry.addData("Done with autonomous Blue test", "");
+        telemetry.addData("Done with autonomous Red test", "");
         telemetry.update();
 
 
     }
 
     private void openClaw() {
-
-        while(servo_position < 0.5) {
-
-        }
-
-        servo_position -= (INCREMENT);
-        servo2.setDirection(CRServo.Direction.REVERSE);
-        servo2.setPower(1);
-        telemetry.addData("R Trigger", "");
-        telemetry.update();
-        servo_position += (INCREMENT);
-        servo2.setDirection(CRServo.Direction.FORWARD);
-        servo2.setPower(1);
 
     }
 
@@ -157,6 +143,13 @@ public class Autonomous_ColorBlue6 extends LinearOpMode {
 
         }
         StopDriving();
+
+        servo.setPosition(0.75);
+        try {
+            Thread.sleep(2500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -202,21 +195,15 @@ public class Autonomous_ColorBlue6 extends LinearOpMode {
 
         //move the servo the correct amount of degress.
         if(direction.equals("Blue")){
-
-            driveForward(0.25, convert_to_REV_distance(5,0));
-            servo.setDirection(Servo.Direction.FORWARD);
-            servo.setPosition(position1);
-            sleep(2500);
-            driveForward(0.25, convert_to_REV_distance(20,0));
-
-
+            driveForward(0.25, convert_to_REV_distance(35,0));
         } else if(direction.equals("Red")){
             leftMotor.setDirection(DcMotor.Direction.REVERSE);
             rightMotor.setDirection(DcMotor.Direction.FORWARD);
             driveForward(0.25, convert_to_REV_distance(20,0));
             leftMotor.setDirection(DcMotor.Direction.FORWARD);
             rightMotor.setDirection(DcMotor.Direction.REVERSE);
-            driveForward(0.25, convert_to_REV_distance(20,0));
+            driveForward(0.25, convert_to_REV_distance(55,0));
+
             //leftMotor.setPower(-1);
             //rightMotor.setPower(-1);
         }
