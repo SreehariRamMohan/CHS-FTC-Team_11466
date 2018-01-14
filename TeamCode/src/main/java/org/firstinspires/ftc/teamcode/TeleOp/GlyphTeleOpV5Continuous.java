@@ -100,6 +100,35 @@ public class GlyphTeleOpV5Continuous extends LinearOpMode {
             } else {
                 pulleyMotor.setPower(0);
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             }
 
             sleep(CYCLE_MS);

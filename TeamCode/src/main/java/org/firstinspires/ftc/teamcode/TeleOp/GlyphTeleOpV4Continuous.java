@@ -65,6 +65,7 @@ public class GlyphTeleOpV4Continuous extends LinearOpMode {
         //double start2 = servo2.getPosition();
 
         while(opModeIsActive()) {
+
             if(gamepad1.left_bumper) {
                 telemetry.addData("L Bumper", "");
                 telemetry.update();
@@ -79,7 +80,6 @@ public class GlyphTeleOpV4Continuous extends LinearOpMode {
                 servo1.setPower(1);
             } else {
                 servo1.setPower(0);
-                //servo2.setPower(0);
             }
 
             if(gamepad1.right_bumper) {
@@ -95,7 +95,6 @@ public class GlyphTeleOpV4Continuous extends LinearOpMode {
                 servo2.setDirection(CRServo.Direction.FORWARD);
                 servo2.setPower(1);
             } else {
-                //servo1.setPower(0);
                 servo2.setPower(0);
             }
 

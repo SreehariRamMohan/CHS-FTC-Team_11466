@@ -22,7 +22,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import static java.lang.Thread.sleep;
 
 
-@Autonomous(name = "Red", group = "Autonomous Version:")
+@Autonomous(name = "Blue", group = "Autonomous Version:")
 
 public class Autonomous_ColorRed extends LinearOpMode {
     /* Declare OpMode members. */
@@ -47,7 +47,7 @@ public class Autonomous_ColorRed extends LinearOpMode {
     double  position = 0; // Start at halfway position
     boolean rampUp = true;
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         telemetry.addData("Status", "Initialized");
 
         leftMotor = hardwareMap.dcMotor.get("left_drive"); //we would configure this in FTC Robot Controller app
@@ -83,7 +83,11 @@ public class Autonomous_ColorRed extends LinearOpMode {
         telemetry.addData("Servo position: " + servo.getPosition()+"", "");
         telemetry.update();
         servo.setPosition(0.25);
-        Thread.sleep(2500);
+        try {
+            Thread.sleep(2500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
 
         while(true) {
@@ -94,13 +98,11 @@ public class Autonomous_ColorRed extends LinearOpMode {
                 if(color.equals("Blue")) {
                     //red is on the right
                     hitBall("Blue");
-                    servo.setPosition(1);
                     telemetry.addData("Blue", "blue");
                     break;
                 } else if(color.equals("Red")) {
                     //blue is on the left
                     hitBall("Red");
-                    servo.setPosition(1);
                     telemetry.addData("Red", "red");
                     break;
                 } else {
@@ -114,13 +116,20 @@ public class Autonomous_ColorRed extends LinearOpMode {
             }
 
         }
+        servo.setPosition(0);
+        try {
+            Thread.sleep(25000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         telemetry.update();
         //move towards glyph
-        driveForward(0.5, convert_to_REV_distance(6,1));
-        turnTo(90);
-        driveForward(0.25, convert_to_REV_distance(6,0));
-        openClaw();
-        driveForward(0.25, convert_to_REV_distance(6,0));
+//        driveForward(0.5, convert_to_REV_distance(6,1));
+//        turnTo(90);
+//        driveForward(0.25, convert_to_REV_distance(6,0));
+//        openClaw();
+//        driveForward(0.25, convert_to_REV_distance(6,0));
         telemetry.addData("Done with autonomous Red test", "");
         telemetry.update();
 
@@ -190,15 +199,15 @@ public class Autonomous_ColorRed extends LinearOpMode {
 
         //move the servo the correct amount of degress.
         if(direction.equals("Red")){
-            leftMotor.setPower(1);
-            rightMotor.setPower(1);
             driveForward(0.25, convert_to_REV_distance(35,0));
         } else if(direction.equals("Blue")){
             leftMotor.setDirection(DcMotor.Direction.REVERSE);
             rightMotor.setDirection(DcMotor.Direction.FORWARD);
-            driveForward(0.25, convert_to_REV_distance(55,0));
+            driveForward(0.25, convert_to_REV_distance(20,0));
             leftMotor.setDirection(DcMotor.Direction.FORWARD);
             rightMotor.setDirection(DcMotor.Direction.REVERSE);
+            driveForward(0.25, convert_to_REV_distance(55,0));
+
             //leftMotor.setPower(-1);
             //rightMotor.setPower(-1);
         }

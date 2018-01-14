@@ -77,11 +77,11 @@ public class Autonomous_Claw_test extends LinearOpMode {
 
         telemetry.addData("Servo position: " + servo.getPosition()+"", "");
         telemetry.update();
-        Thread.sleep(2500);
+        Thread.sleep(25000);
 
 
         //move towards glyph
-        driveForward(0.5, convert_to_REV_distance(6,1));
+        driveForward(0.5, convert_to_REV_distance(6,2));
         turnTo(90);
         driveForward(0.25, convert_to_REV_distance(6,0));
         openClaw();

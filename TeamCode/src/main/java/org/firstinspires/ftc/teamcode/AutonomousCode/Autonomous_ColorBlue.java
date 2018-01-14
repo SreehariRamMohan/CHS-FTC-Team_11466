@@ -23,7 +23,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import static java.lang.Thread.sleep;
 
 
-@Autonomous(name = "Blue", group = "Autonomous Version:")
+@Autonomous(name = "Red", group = "Autonomous Version:")
 
 public class Autonomous_ColorBlue extends LinearOpMode {
     /* Declare OpMode members. */
@@ -96,14 +96,13 @@ public class Autonomous_ColorBlue extends LinearOpMode {
                 if(color.equals("Blue")) {
                     //red is on the right
                     hitBall("Blue");
-                    servo.setPosition(1);
                     break;
                 } else if(color.equals("Red")) {
                     //blue is on the left
                     hitBall("Red");
-                    servo.setPosition(1);
                     break;
                 } else {
+                    telemetry.addData("Neither", "neither");
                     break;
                     //recalibrate
                 }
@@ -112,12 +111,14 @@ public class Autonomous_ColorBlue extends LinearOpMode {
             }
 
         }
+        servo.setPosition(0);
+        Thread.sleep(25000);
         //move towards glyph
-        driveForward(0.5, convert_to_REV_distance(6,1));
-        turnTo(90);
-        driveForward(0.25, convert_to_REV_distance(6,0));
-        openClaw();
-        driveForward(0.25, convert_to_REV_distance(6,0));
+//        driveForward(0.5, convert_to_REV_distance(6,1));
+//        turnTo(90);
+//        driveForward(0.25, convert_to_REV_distance(6,0));
+//        openClaw();
+//        driveForward(0.25, convert_to_REV_distance(6,0));
         telemetry.addData("Done with autonomous Blue test", "");
         telemetry.update();
 
@@ -200,15 +201,16 @@ public class Autonomous_ColorBlue extends LinearOpMode {
 
         //move the servo the correct amount of degress.
         if(direction.equals("Blue")){
-            leftMotor.setPower(1);
-            rightMotor.setPower(1);
-            driveForward(0.25, convert_to_REV_distance(35,0));
+
+            driveForward(0.25, convert_to_REV_distance(25,0));
         } else if(direction.equals("Red")){
             leftMotor.setDirection(DcMotor.Direction.REVERSE);
             rightMotor.setDirection(DcMotor.Direction.FORWARD);
-            driveForward(0.25, convert_to_REV_distance(35,0));
+            driveForward(0.25, convert_to_REV_distance(20,0));
+            servo.setPosition(0);
             leftMotor.setDirection(DcMotor.Direction.FORWARD);
             rightMotor.setDirection(DcMotor.Direction.REVERSE);
+            driveForward(0.25, convert_to_REV_distance(25,0));
             //leftMotor.setPower(-1);
             //rightMotor.setPower(-1);
         }
