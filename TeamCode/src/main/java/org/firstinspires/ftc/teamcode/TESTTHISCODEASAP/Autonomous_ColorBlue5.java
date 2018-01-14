@@ -83,7 +83,7 @@ public class Autonomous_ColorBlue5 extends LinearOpMode {
         Thread.sleep(2500);
 
 
-        while(true) {
+        while(opModeIsActive()) {
             telemetry.addData("In while loop","while");
             telemetry.update();
             try {

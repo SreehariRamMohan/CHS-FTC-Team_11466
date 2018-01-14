@@ -85,7 +85,7 @@ public class Autonomous_ColorRed5 extends LinearOpMode {
         }
 
 
-        while(true) {
+        while(opModeIsActive()) {
             telemetry.addData("In while loop","while");
             telemetry.update();
             try {
