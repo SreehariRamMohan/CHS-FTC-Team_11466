@@ -76,6 +76,7 @@ public class Autonomous_ColorRed6 extends LinearOpMode {
         }
 
 
+
         telemetry.addData("Servo position: " + servo.getPosition()+"", "");
         telemetry.update();
         servo.setPosition(0.25);
