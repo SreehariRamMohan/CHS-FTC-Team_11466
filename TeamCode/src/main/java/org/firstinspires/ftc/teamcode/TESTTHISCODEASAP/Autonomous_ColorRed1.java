@@ -111,14 +111,19 @@ public class Autonomous_ColorRed1 extends LinearOpMode {
             }
 
         }
+        telemetry.addData("Moving Servo", "");
+        telemetry.update();
         servo.setPosition(0);
+
         try {
+            telemetry.addData("Going to sleep", "");
+            telemetry.update();
             Thread.sleep(25000);
+            telemetry.addData("Done sleeping", "");
+            telemetry.update();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        telemetry.update();
         //move towards glyph
 //        driveForward(0.5, convert_to_REV_distance(6,1));
 //        turnTo(90);

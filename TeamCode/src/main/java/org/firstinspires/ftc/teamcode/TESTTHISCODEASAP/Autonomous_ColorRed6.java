@@ -43,7 +43,7 @@ public class Autonomous_ColorRed6 extends LinearOpMode {
     double  position = 0; // Start at halfway position
     boolean rampUp = true;
     @Override
-    public void runOpMode() {
+    public void runOpMode() throws InterruptedException{
         telemetry.addData("Status", "Initialized");
 
         leftMotor = hardwareMap.dcMotor.get("left_drive"); //we would configure this in FTC Robot Controller app
@@ -79,12 +79,9 @@ public class Autonomous_ColorRed6 extends LinearOpMode {
         telemetry.addData("Servo position: " + servo.getPosition()+"", "");
         telemetry.update();
         servo.setPosition(0.25);
-        try {
-            Thread.sleep(2500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
+        Thread.sleep(2500);
+        telemetry.addData("Sleep 2500 is over", "");
+        telemetry.update();
 
         while(opModeIsActive()) {
             telemetry.addData("In while loop","while");
@@ -94,17 +91,14 @@ public class Autonomous_ColorRed6 extends LinearOpMode {
                 if(color.equals("Blue")) {
                     //red is on the right
                     hitBall("Blue");
-                    telemetry.addData("Blue", "blue");
                     break;
                 } else if(color.equals("Red")) {
                     //blue is on the left
                     hitBall("Red");
-                    telemetry.addData("Red", "red");
                     break;
                 } else {
                     telemetry.addData("Neither", "neither");
                     break;
-
                     //recalibrate
                 }
             } catch (InterruptedException e) {
@@ -112,6 +106,8 @@ public class Autonomous_ColorRed6 extends LinearOpMode {
             }
 
         }
+        telemetry.addData("Out of while - Moving servo final time", "");
+        telemetry.update();
         servo.setPosition(0);
 
 

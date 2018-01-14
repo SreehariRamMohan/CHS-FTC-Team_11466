@@ -83,7 +83,8 @@ public class Autonomous_ColorBlue6 extends LinearOpMode {
         telemetry.update();
         servo.setPosition(0.25);
         Thread.sleep(2500);
-
+        telemetry.addData("Sleep 2500 is over", "");
+        telemetry.update();
 
         while(opModeIsActive()) {
             telemetry.addData("In while loop","while");
@@ -108,6 +109,8 @@ public class Autonomous_ColorBlue6 extends LinearOpMode {
             }
 
         }
+        telemetry.addData("Out of while - Moving servo final time", "");
+        telemetry.update();
         servo.setPosition(0);
         //move towards glyph
 //        driveForward(0.5, convert_to_REV_distance(6,1));
