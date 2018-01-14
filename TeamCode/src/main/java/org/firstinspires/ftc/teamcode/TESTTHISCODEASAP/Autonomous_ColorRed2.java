@@ -131,9 +131,6 @@ public class Autonomous_ColorRed2 extends LinearOpMode {
 
     }
 
-    private void openClaw() {
-
-    }
 
     public void driveForward(double power, int distance){
         leftMotor.setMode(DcMotor.RunMode.RESET_ENCODERS);

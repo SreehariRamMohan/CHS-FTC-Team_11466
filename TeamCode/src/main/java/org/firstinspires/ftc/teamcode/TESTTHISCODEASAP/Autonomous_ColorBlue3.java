@@ -20,7 +20,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 @Autonomous(name = "Red", group = "Autonomous Version:")
 
-public class Autonomous_ColorBlue2 extends LinearOpMode {
+public class Autonomous_ColorBlue3 extends LinearOpMode {
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftMotor = null;
