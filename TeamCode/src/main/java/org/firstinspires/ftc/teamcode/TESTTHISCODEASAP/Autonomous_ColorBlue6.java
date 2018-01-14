@@ -1,4 +1,6 @@
-//Add idle() to the end of the opmode.
+//remove the thread.sleep()
+//removed servo initialization in between calibrate and while() calibrating
+
 package org.firstinspires.ftc.teamcode.TESTTHISCODEASAP;
 
 import android.graphics.Color;
@@ -20,7 +22,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 @Autonomous(name = "Red", group = "Autonomous Version:")
 
-public class Autonomous_ColorBlue3 extends LinearOpMode {
+public class Autonomous_ColorBlue6 extends LinearOpMode {
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftMotor = null;
@@ -62,20 +64,19 @@ public class Autonomous_ColorBlue3 extends LinearOpMode {
         leftMotor.isBusy(); //tells you if it is still running to the position that u set
         leftMotor.setDirection(DcMotor.Direction.FORWARD);
         rightMotor.setDirection(DcMotor.Direction.REVERSE);
-
         gyro.calibrate();
-
-
-        //initialize the serovs for the claw
-        servo1 =  hardwareMap.crservo.get("servo_left");
-        servo2 =  hardwareMap.crservo.get("servo_right");
-
 
         while (gyro.isCalibrating())  {
             telemetry.addData("calibrating", "%s", Math.round(timer.seconds())%2==0 ? "|.." : "..|");
             telemetry.update();
             sleep(50);
         }
+
+
+        //initialize the serovs for the claw
+        servo1 =  hardwareMap.crservo.get("servo_left");
+        servo2 =  hardwareMap.crservo.get("servo_right");
+
 
 
         telemetry.addData("Servo position: " + servo.getPosition()+"", "");
@@ -107,22 +108,35 @@ public class Autonomous_ColorBlue3 extends LinearOpMode {
             }
 
         }
-
         servo.setPosition(0);
-        Thread.sleep(25000);
         //move towards glyph
 //        driveForward(0.5, convert_to_REV_distance(6,1));
 //        turnTo(90);
 //        driveForward(0.25, convert_to_REV_distance(6,0));
+//        openClaw();
 //        driveForward(0.25, convert_to_REV_distance(6,0));
         telemetry.addData("Done with autonomous Blue test", "");
         telemetry.update();
 
-        idle();
 
     }
 
+    private void openClaw() {
 
+        while(servo_position < 0.5) {
+
+        }
+
+        servo_position -= (INCREMENT);
+        servo2.setDirection(CRServo.Direction.REVERSE);
+        servo2.setPower(1);
+        telemetry.addData("R Trigger", "");
+        telemetry.update();
+        servo_position += (INCREMENT);
+        servo2.setDirection(CRServo.Direction.FORWARD);
+        servo2.setPower(1);
+
+    }
 
     public void driveForward(double power, int distance){
         leftMotor.setMode(DcMotor.RunMode.RESET_ENCODERS);
@@ -183,6 +197,7 @@ public class Autonomous_ColorBlue3 extends LinearOpMode {
 
         //move the servo the correct amount of degress.
         if(direction.equals("Blue")){
+
             driveForward(0.25, convert_to_REV_distance(25,0));
         } else if(direction.equals("Red")){
             leftMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -241,12 +256,12 @@ public class Autonomous_ColorBlue3 extends LinearOpMode {
         float max = Math.max(Math.max(Math.max(colors.red, colors.green), colors.blue), colors.alpha);
 
         double ratio = colors.red / colors.blue;
-        if(ratio >= 0.15 && ratio <= 1.6) {
+        if(ratio >= 0.15 && ratio <= 1.3) {
             telemetry.addLine("Blue");
             telemetry.update();
             return "Blue";
 
-        } else if(ratio > 2.25 && ratio <= 2.7) {
+        } else if(ratio > 1.7 && ratio <= 3.5) {
             telemetry.addLine("Red");
             telemetry.update();
             return "Red";
@@ -270,7 +285,6 @@ public class Autonomous_ColorBlue3 extends LinearOpMode {
     String formatFloat(float rate) {
         return String.format("%.3f", rate);
     }
-
 
 }
 
