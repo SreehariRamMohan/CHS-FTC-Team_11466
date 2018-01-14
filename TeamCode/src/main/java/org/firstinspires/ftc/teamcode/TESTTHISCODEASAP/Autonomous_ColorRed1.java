@@ -17,7 +17,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 
-@Autonomous(name = "Blue", group = "Autonomous Version:")
+@Autonomous(name = "Blue1", group = "Autonomous Version:")
 
 public class Autonomous_ColorRed1 extends LinearOpMode {
     /* Declare OpMode members. */

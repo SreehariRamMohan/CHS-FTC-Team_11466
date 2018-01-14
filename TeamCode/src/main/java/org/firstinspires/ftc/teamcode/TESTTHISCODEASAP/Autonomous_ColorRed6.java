@@ -18,7 +18,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 
-@Autonomous(name = "Blue", group = "Autonomous Version:")
+@Autonomous(name = "Blue6", group = "Autonomous Version:")
 
 public class Autonomous_ColorRed6 extends LinearOpMode {
     /* Declare OpMode members. */
@@ -249,12 +249,12 @@ public class Autonomous_ColorRed6 extends LinearOpMode {
         float max = Math.max(Math.max(Math.max(colors.red, colors.green), colors.blue), colors.alpha);
 
         double ratio = colors.red / colors.blue;
-        if(ratio >= 0.15 && ratio <= 1.3) {
+        if(ratio >= 0.15 && ratio <= 1.6) {
             telemetry.addLine("Blue");
             telemetry.update();
             return "Blue";
 
-        } else if(ratio > 1.7 && ratio <= 3.5) {
+        } else if(ratio > 2.25 && ratio <= 2.7) {
             telemetry.addLine("Red");
             telemetry.update();
             return "Red";
@@ -264,6 +264,7 @@ public class Autonomous_ColorRed6 extends LinearOpMode {
             telemetry.update();
             return "Neither";
         }
+
 
 
     }

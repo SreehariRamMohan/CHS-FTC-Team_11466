@@ -1,4 +1,4 @@
-//This code is just a version with the correct Color Thresholds for the color sensor
+//This code changes the while loop to check if opModeIsActive
 package org.firstinspires.ftc.teamcode.TESTTHISCODEASAP;
 
 import android.graphics.Color;
@@ -18,9 +18,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 
-@Autonomous(name = "Red1", group = "Autonomous Version:")
+@Autonomous(name = "Red4", group = "Autonomous Version:")
 
-public class Autonomous_ColorBlue1 extends LinearOpMode {
+public class Autonomous_ColorBlue4 extends LinearOpMode {
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftMotor = null;
@@ -76,14 +76,14 @@ public class Autonomous_ColorBlue1 extends LinearOpMode {
             sleep(50);
         }
 
-
+        double position = servo.getPosition();
         telemetry.addData("Servo position: " + servo.getPosition()+"", "");
         telemetry.update();
         servo.setPosition(0.25);
         Thread.sleep(2500);
 
 
-        while(true) {
+        while(opModeIsActive()) {
             telemetry.addData("In while loop","while");
             telemetry.update();
             try {
@@ -106,13 +106,12 @@ public class Autonomous_ColorBlue1 extends LinearOpMode {
             }
 
         }
-        servo.setPosition(0);
-        sleep(25000);
+        servo.setPosition(position);
+        Thread.sleep(25000);
         //move towards glyph
 //        driveForward(0.5, convert_to_REV_distance(6,1));
 //        turnTo(90);
 //        driveForward(0.25, convert_to_REV_distance(6,0));
-//        openClaw();
 //        driveForward(0.25, convert_to_REV_distance(6,0));
         telemetry.addData("Done with autonomous Blue test", "");
         telemetry.update();
@@ -120,22 +119,7 @@ public class Autonomous_ColorBlue1 extends LinearOpMode {
 
     }
 
-    private void openClaw() {
 
-        while(servo_position < 0.5) {
-
-        }
-
-        servo_position -= (INCREMENT);
-        servo2.setDirection(CRServo.Direction.REVERSE);
-        servo2.setPower(1);
-        telemetry.addData("R Trigger", "");
-        telemetry.update();
-        servo_position += (INCREMENT);
-        servo2.setDirection(CRServo.Direction.FORWARD);
-        servo2.setPower(1);
-
-    }
 
     public void driveForward(double power, int distance){
         leftMotor.setMode(DcMotor.RunMode.RESET_ENCODERS);
