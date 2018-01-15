@@ -7,6 +7,7 @@ import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -16,7 +17,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 
-@Autonomous(name = "Claw", group = "Autonomous Version:")
+@Autonomous(name = "Safe Zone", group = "Autonomous Version:")
 
 public class Autonomous_Claw_test extends LinearOpMode {
     /* Declare OpMode members. */
@@ -65,6 +66,7 @@ public class Autonomous_Claw_test extends LinearOpMode {
         rightMotor.setDirection(DcMotor.Direction.REVERSE);
 //        servo.setPosition(90);
 
+
         //colorSensor = hardwareMap.colorSensor.get("name_of_color_sensor"); //we would configure the name of the color sensor later in the
         //ftc robot controller
         gyro.calibrate();
@@ -74,18 +76,24 @@ public class Autonomous_Claw_test extends LinearOpMode {
             sleep(50);
         }
 
+        waitForStart();
 
         telemetry.addData("Servo position: " + servo.getPosition()+"", "");
         telemetry.update();
-        Thread.sleep(25000);
+        Thread.sleep(2500);
 
 
         //move towards glyph
-        driveForward(0.5, convert_to_REV_distance(6,2));
-        turnTo(90);
-        driveForward(0.25, convert_to_REV_distance(6,0));
-        openClaw();
-        driveForward(0.25, convert_to_REV_distance(6,0));
+        driveForward(0.5, convert_to_REV_distance(0,2));
+
+        leftMotor.setDirection(DcMotor.Direction.REVERSE);
+        rightMotor.setDirection(DcMotor.Direction.FORWARD);
+        driveForward(0.3, convert_to_REV_distance(3,0));
+
+        leftMotor.setDirection(DcMotor.Direction.FORWARD);
+        rightMotor.setDirection(DcMotor.Direction.REVERSE);
+
+
         telemetry.addData("Done with autonomous test", "");
         telemetry.update();
         
@@ -183,7 +191,7 @@ public class Autonomous_Claw_test extends LinearOpMode {
 
     public int convert_to_REV_distance(int inches, int feet) {
         double conversation_1_foot = 1120;
-        return (int) ((inches/12) * conversation_1_foot + feet*conversation_1_foot);
+        return (int) ((inches/12.0) * conversation_1_foot + feet*conversation_1_foot);
     }
 
     protected String getColor() throws InterruptedException {

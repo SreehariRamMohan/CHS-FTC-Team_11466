@@ -28,7 +28,7 @@ public class GlyphTeleOpV4Continuous extends LinearOpMode {
     CRServo servo2 = null;
     private double y1 = 0.;
     private double y2 = 0.;
-    private double speed = .3;
+    private double speed = 0.35;
     @Override
     public void runOpMode() throws InterruptedException {
         /*
@@ -116,11 +116,17 @@ public class GlyphTeleOpV4Continuous extends LinearOpMode {
 
             leftMotor.setPower(-y1 * speed);
             rightMotor.setPower(-y2 * speed);
+
             if(gamepad2.b){
                 speed +=0.01;
             }
             if(gamepad2.a){
                 speed -= 0.01;
+            }
+
+            if(gamepad1.x) {
+                Servo servo = hardwareMap.get(Servo.class, "servo_jewel");
+                servo.setPosition(0.75);
             }
         }
     }

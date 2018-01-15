@@ -75,7 +75,7 @@ public class Autonomous_ColorRed6 extends LinearOpMode {
             sleep(50);
         }
 
-
+        waitForStart();
 
         telemetry.addData("Servo position: " + servo.getPosition()+"", "");
         telemetry.update();
@@ -99,7 +99,16 @@ public class Autonomous_ColorRed6 extends LinearOpMode {
                     break;
                 } else {
                     telemetry.addData("Neither", "neither");
-                    break;
+                    telemetry.update();
+                    //driveForward(0.3, convert_to_REV_distance(1, 0));
+                    //Thread.sleep(50);
+                    leftMotor.setPower(0.15);
+                    rightMotor.setPower(0.15);
+                    Thread.sleep(200);
+                    leftMotor.setPower(0);
+                    rightMotor.setPower(0);
+                    Thread.sleep(1000);
+
                     //recalibrate
                 }
             } catch (InterruptedException e) {
@@ -194,14 +203,14 @@ public class Autonomous_ColorRed6 extends LinearOpMode {
 
         //move the servo the correct amount of degress.
         if(direction.equals("Red")){
-            driveForward(0.25, convert_to_REV_distance(35,0));
+            driveForward(0.25, convert_to_REV_distance(5,0));
         } else if(direction.equals("Blue")){
             leftMotor.setDirection(DcMotor.Direction.REVERSE);
             rightMotor.setDirection(DcMotor.Direction.FORWARD);
-            driveForward(0.25, convert_to_REV_distance(20,0));
+            driveForward(0.3, convert_to_REV_distance(5,0));
             leftMotor.setDirection(DcMotor.Direction.FORWARD);
             rightMotor.setDirection(DcMotor.Direction.REVERSE);
-            driveForward(0.25, convert_to_REV_distance(55,0));
+//            driveForward(0.25, convert_to_REV_distance(55,0));
 
             //leftMotor.setPower(-1);
             //rightMotor.setPower(-1);
@@ -223,7 +232,7 @@ public class Autonomous_ColorRed6 extends LinearOpMode {
 
     public int convert_to_REV_distance(int inches, int feet) {
         double conversation_1_foot = 1120;
-        return (int) ((inches/12) * conversation_1_foot + feet*conversation_1_foot);
+        return (int) ((inches/12.0) * conversation_1_foot + feet*conversation_1_foot);
     }
 
     protected String getColor() throws InterruptedException {
@@ -252,22 +261,34 @@ public class Autonomous_ColorRed6 extends LinearOpMode {
         float max = Math.max(Math.max(Math.max(colors.red, colors.green), colors.blue), colors.alpha);
 
         double ratio = colors.red / colors.blue;
-        if(ratio >= 0.15 && ratio <= 1.6) {
+//        if(ratio >= 0.15 && ratio <= 1.6) {
+//            telemetry.addLine("Blue");
+//            telemetry.update();
+//            return "Blue";
+//
+//        } else if(ratio > 2.25 && ratio <= 2.7) {
+//            telemetry.addLine("Red");
+//            telemetry.update();
+//            return "Red";
+//
+//        } else {
+//            telemetry.addLine("Neither");
+//            telemetry.update();
+//            return "Neither";
+//        }
+
+
+        if(colors.blue > 140) {
             telemetry.addLine("Blue");
             telemetry.update();
             return "Blue";
-
-        } else if(ratio > 2.25 && ratio <= 2.7) {
+        } else if(colors.red > 140) {
             telemetry.addLine("Red");
             telemetry.update();
             return "Red";
-
         } else {
-            telemetry.addLine("Neither");
-            telemetry.update();
             return "Neither";
         }
-
 
 
     }

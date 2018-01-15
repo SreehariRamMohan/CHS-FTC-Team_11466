@@ -99,36 +99,6 @@ public class GlyphTeleOpV5Continuous extends LinearOpMode {
                 pulleyMotor.setPower(-0.5);
             } else {
                 pulleyMotor.setPower(0);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             }
 
             sleep(CYCLE_MS);
@@ -148,7 +118,7 @@ public class GlyphTeleOpV5Continuous extends LinearOpMode {
             }
 
 
-            if(gamepad2.x) {
+            if(gamepad1.x) {
                 Servo servo = hardwareMap.get(Servo.class, "servo_jewel");
                 servo.setPosition(0);
             }
