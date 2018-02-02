@@ -24,6 +24,7 @@ public class GlyphTeleOpV5Continuous extends LinearOpMode {
     DcMotor leftMotor   = null;
     DcMotor pulleyMotor   = null;
     DcMotor rightMotor  = null;
+    DcMotor relicMotor = null;
     CRServo servo1 = null;
     CRServo servo2 = null;
     private double y1 = 0.;
@@ -40,6 +41,7 @@ public class GlyphTeleOpV5Continuous extends LinearOpMode {
         leftMotor = (DcMotor) hardwareMap.dcMotor.get("left_drive");
         pulleyMotor = (DcMotor) hardwareMap.dcMotor.get("pulley");
         rightMotor = (DcMotor) hardwareMap.dcMotor.get("right_drive");
+        relicMotor = (DcMotor) hardwareMap.dcMotor.get("relic");
         servo1 =  hardwareMap.crservo.get("servo_left");
         servo2 =  hardwareMap.crservo.get("servo_right");
         // Ensure the robot it stationary, then reset the encoders and calibrate the gyro.
@@ -87,7 +89,7 @@ public class GlyphTeleOpV5Continuous extends LinearOpMode {
                 closeLeft();
             } else if(gamepad1.dpad_right) {
                 closeRight();
-            }else {
+            } else {
                 servo1.setPower(0);
                 servo2.setPower(0);
             }
@@ -106,7 +108,8 @@ public class GlyphTeleOpV5Continuous extends LinearOpMode {
             y1 = gamepad2.left_stick_y;
             y2 = gamepad2.right_stick_y;
 
-            telemetry.update();
+            relicMotor.setPower(-gamepad1.left_stick_y);
+
 
             leftMotor.setPower(-y1 * speed);
             rightMotor.setPower(-y2 * speed);

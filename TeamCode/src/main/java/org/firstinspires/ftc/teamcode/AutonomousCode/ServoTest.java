@@ -84,8 +84,8 @@ public class ServoTest extends LinearOpMode {
         double position = 0;
 
         try {
-            servo.setPosition(0.65);
-            position = 0.65;
+            servo.setPosition(1);
+            position = 1;
             Thread.sleep(2000);
             servo.setPosition(0.75);
             position = 0.75;
