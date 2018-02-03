@@ -8,6 +8,7 @@ import android.view.View;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
@@ -18,12 +19,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 /**
- * Created by Michelle on 2/1/2018.
+ * Created by Michelle on 2/2/2018.
  */
 
-@Autonomous(name = "Red Top", group = "Autonomous Version:")
+@Autonomous(name = "Blue Top Glyph 25", group = "Autonomous Version:")
 
-public class RedTop extends LinearOpMode {
+public class BlueTopGlyph25 extends LinearOpMode {
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftMotor = null;
@@ -35,6 +36,8 @@ public class RedTop extends LinearOpMode {
     ModernRoboticsI2cGyro gyro;
     ModernRoboticsI2cGyro modernRoboticsI2cGyro;
     ElapsedTime timer = new ElapsedTime();
+    CRServo servo1 = null;
+    CRServo servo2 = null;
 
     static final double INCREMENT   = 0.01;     // amount to slew servo each CYCLE_MS cycle
     static final int    CYCLE_MS    =   50;     // period of each cycle
@@ -52,8 +55,8 @@ public class RedTop extends LinearOpMode {
         leftMotor = hardwareMap.dcMotor.get("left_drive"); //we would configure this in FTC Robot Controller app
         rightMotor = hardwareMap.dcMotor.get("right_drive");
         servo = hardwareMap.get(Servo.class, "servo_jewel");
-
-
+        servo1 =  hardwareMap.crservo.get("servo_left");
+        servo2 =  hardwareMap.crservo.get("servo_right");
         gyro = hardwareMap.get(ModernRoboticsI2cGyro.class, "sensor_gyro");
 
         leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -80,49 +83,35 @@ public class RedTop extends LinearOpMode {
 
         waitForStart();
 
-        telemetry.addData("Servo position: " + servo.getPosition()+"", "");
-        telemetry.update();
-        servo.setPosition(0.3);
-        Thread.sleep(2500);
-        telemetry.addData("Sleep 2500 is over", "");
-        telemetry.update();
-
-        try {
-            String color = getColor();
-            if(color.equals("Blue")) {
-                //red is on the right
-                hitBall("Blue");
-            } else if(color.equals("Red")) {
-                //blue is on the left
-                hitBall("Red");
-            } else {
-                telemetry.addData("Neither", "neither");
-                //recalibrate
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        long start = System.currentTimeMillis();
+        while (System.currentTimeMillis() - start < 2500) {
+            closeLeft();
+            closeRight();
         }
 
-        telemetry.addData("Out of while - Moving servo final time", "");
-        telemetry.update();
-
-
-
-        telemetry.update();
-        //move towards glyph
-//        driveForward(0.5, convert_to_REV_distance(6,1));
-//        turnTo(90);
-//        driveForward(0.25, convert_to_REV_distance(6,0));
-//        openClaw();
-//        driveForward(0.25, convert_to_REV_distance(6,0));
-        telemetry.addData("Done with autonomous Red test", "");
-        telemetry.update();
+        driveForward(0.15, convert_to_REV_distance(20, 0));
 
 
     }
 
-    private void openClaw() {
+    public void openLeft() {
+        servo1.setDirection(CRServo.Direction.FORWARD);
+        servo1.setPower(1);
+    }
 
+    public void openRight() {
+        servo2.setDirection(CRServo.Direction.REVERSE);
+        servo2.setPower(1);
+    }
+
+    public void closeLeft() {
+        servo1.setDirection(CRServo.Direction.REVERSE);
+        servo1.setPower(1);
+    }
+
+    public void closeRight() {
+        servo2.setDirection(CRServo.Direction.FORWARD);
+        servo2.setPower(1);
     }
 
     public void driveForward(double power, int distance){
@@ -148,11 +137,13 @@ public class RedTop extends LinearOpMode {
         leftMotor.setPower(0);
         rightMotor.setPower(0);
     }
+
     public void DriveForward(double power){
         //For now, we set leftMotor power to negative because our summer training robot has the left motor facing backwards. TODO: Change this after when we switch robots
         leftMotor.setPower(power);
         rightMotor.setPower(power);
     }
+
     public void turnTo(double degrees){
         int turnBy = -1;                 //turns clockwise
 
@@ -171,14 +162,17 @@ public class RedTop extends LinearOpMode {
         leftMotor.setPower(0);
         rightMotor.setPower(0);
     }
+
     public void TurnLeft(double power){
         leftMotor.setPower(-power);
         rightMotor.setPower(power);
     }
+
     public void TurnRight(double power){
         leftMotor.setPower(power);
         rightMotor.setPower(-power);
     }
+
     //Pass in right for right, left for left
     public void hitBall(String direction){
 
