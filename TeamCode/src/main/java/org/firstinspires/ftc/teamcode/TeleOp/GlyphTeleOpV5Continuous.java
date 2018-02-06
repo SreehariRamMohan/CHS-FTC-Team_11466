@@ -130,6 +130,8 @@ public class GlyphTeleOpV5Continuous extends LinearOpMode {
         }
     }
 
+    //OPEN IS CLOSE AND CLOSE IS OPEN
+
     public void openLeft() {
         servo1.setDirection(CRServo.Direction.FORWARD);
         servo1.setPower(1);

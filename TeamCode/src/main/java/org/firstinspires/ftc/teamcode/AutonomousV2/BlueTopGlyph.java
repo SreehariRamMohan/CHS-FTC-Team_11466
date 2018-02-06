@@ -29,6 +29,7 @@ public class BlueTopGlyph extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftMotor = null;
     private DcMotor rightMotor = null;
+    private DcMotor pulleyMotor = null;
     NormalizedColorSensor colorSensor;
     View relativeLayout;
     private double start_time;
@@ -54,7 +55,7 @@ public class BlueTopGlyph extends LinearOpMode {
 
         leftMotor = hardwareMap.dcMotor.get("left_drive"); //we would configure this in FTC Robot Controller app
         rightMotor = hardwareMap.dcMotor.get("right_drive");
-        servo = hardwareMap.get(Servo.class, "servo_jewel");
+        pulleyMotor = (DcMotor) hardwareMap.dcMotor.get("pulley");
         servo1 =  hardwareMap.crservo.get("servo_left");
         servo2 =  hardwareMap.crservo.get("servo_right");
         gyro = hardwareMap.get(ModernRoboticsI2cGyro.class, "sensor_gyro");
@@ -85,14 +86,21 @@ public class BlueTopGlyph extends LinearOpMode {
 
         long start = System.currentTimeMillis();
         while (System.currentTimeMillis() - start < 3000) {
-            closeLeft();
-            closeRight();
+            openLeft();
+            openRight();
+        }
+
+        start = System.currentTimeMillis();
+        while (System.currentTimeMillis() - start < 1000) {
+            pulleyMotor.setPower(-0.5);
         }
 
         driveForward(0.15, convert_to_REV_distance(20, 0));
 
 
     }
+
+    //OPEN IS CLOSE AND CLOSE IS OPEN
 
     public void openLeft() {
         servo1.setDirection(CRServo.Direction.FORWARD);
