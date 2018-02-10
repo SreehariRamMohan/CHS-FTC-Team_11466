@@ -8,7 +8,6 @@ import android.view.View;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
@@ -18,18 +17,17 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
-/**'
- * Created by Michelle on 2/2/2018.
+/**
+ * Created by Michelle on 2/9/2018.
  */
 
-@Autonomous(name = "Blue Top Glyph 2", group = "Autonomous Version:")
+@Autonomous(name = "Blue Jewel", group = "Autonomous Version:")
 
-public class BlueTopGlyph2 extends LinearOpMode {
+public class BlueJewel3 extends LinearOpMode {
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftMotor = null;
     private DcMotor rightMotor = null;
-    private DcMotor pulleyMotor = null;
     NormalizedColorSensor colorSensor;
     View relativeLayout;
     private double start_time;
@@ -37,8 +35,6 @@ public class BlueTopGlyph2 extends LinearOpMode {
     ModernRoboticsI2cGyro gyro;
     ModernRoboticsI2cGyro modernRoboticsI2cGyro;
     ElapsedTime timer = new ElapsedTime();
-    CRServo servo1 = null;
-    CRServo servo2 = null;
 
     static final double INCREMENT   = 0.01;     // amount to slew servo each CYCLE_MS cycle
     static final int    CYCLE_MS    =   50;     // period of each cycle
@@ -55,9 +51,9 @@ public class BlueTopGlyph2 extends LinearOpMode {
 
         leftMotor = hardwareMap.dcMotor.get("left_drive"); //we would configure this in FTC Robot Controller app
         rightMotor = hardwareMap.dcMotor.get("right_drive");
-        pulleyMotor = (DcMotor) hardwareMap.dcMotor.get("pulley");
-        servo1 =  hardwareMap.crservo.get("servo_left");
-        servo2 =  hardwareMap.crservo.get("servo_right");
+        servo = hardwareMap.get(Servo.class, "servo_jewel");
+
+
         gyro = hardwareMap.get(ModernRoboticsI2cGyro.class, "sensor_gyro");
 
         leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -84,55 +80,49 @@ public class BlueTopGlyph2 extends LinearOpMode {
 
         waitForStart();
 
-        long start = System.currentTimeMillis();
-        while (System.currentTimeMillis() - start < 1500 && opModeIsActive()) {
-            openLeft();
-            openRight();
+        telemetry.addData("Servo position: " + servo.getPosition()+"", "");
+        telemetry.update();
+        servo.setPosition(0.3);
+        Thread.sleep(2500);
+        telemetry.addData("Sleep 2500 is over", "");
+        telemetry.update();
+
+        try {
+            String color = getColor();
+            if(color.equals("Blue")) {
+                //red is on the right
+                hitBall("Blue");
+            } else if(color.equals("Red")) {
+                //blue is on the left
+                hitBall("Red");
+            } else {
+                telemetry.addData("Neither", "neither");
+                //recalibrate
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
-        start = System.currentTimeMillis();
-        while (System.currentTimeMillis() - start < 1000 && opModeIsActive()) {
-            pulleyMotor.setPower(-0.5);
-        }
+        telemetry.addData("Out of while - Moving servo final time", "");
+        telemetry.update();
 
-        pulleyMotor.setPower(0);
 
-        driveForward(0.15, convert_to_REV_distance(0, 2));
-        turnTo(90);
-        driveForward(0.15, convert_to_REV_distance(6, 0));
-        turnTo(0);
-        driveForward(0.15, convert_to_REV_distance(6, 0));
 
-        start = System.currentTimeMillis();
-        while (System.currentTimeMillis() - start < 500) {
-            closeLeft();
-            closeRight();
-        }
-
+        telemetry.update();
+        //move towards glyph
+//        driveForward(0.5, convert_to_REV_distance(6,1));
+//        turnTo(90);
+//        driveForward(0.25, convert_to_REV_distance(6,0));
+//        openClaw();
+//        driveForward(0.25, convert_to_REV_distance(6,0));
+        telemetry.addData("Done with autonomous Red test", "");
+        telemetry.update();
 
 
     }
 
-    //OPEN IS CLOSE AND CLOSE IS OPEN
+    private void openClaw() {
 
-    public void openLeft() {
-        servo1.setDirection(CRServo.Direction.FORWARD);
-        servo1.setPower(1);
-    }
-
-    public void openRight() {
-        servo2.setDirection(CRServo.Direction.REVERSE);
-        servo2.setPower(1);
-    }
-
-    public void closeLeft() {
-        servo1.setDirection(CRServo.Direction.REVERSE);
-        servo1.setPower(1);
-    }
-
-    public void closeRight() {
-        servo2.setDirection(CRServo.Direction.FORWARD);
-        servo2.setPower(1);
     }
 
     public void driveForward(double power, int distance){
@@ -145,7 +135,7 @@ public class BlueTopGlyph2 extends LinearOpMode {
         leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         DriveForward(power);
-        while(leftMotor.isBusy() && rightMotor.isBusy() && opModeIsActive()){
+        while(leftMotor.isBusy() && rightMotor.isBusy()){
 
         }
         StopDriving();
@@ -158,15 +148,18 @@ public class BlueTopGlyph2 extends LinearOpMode {
         leftMotor.setPower(0);
         rightMotor.setPower(0);
     }
-
     public void DriveForward(double power){
         //For now, we set leftMotor power to negative because our summer training robot has the left motor facing backwards. TODO: Change this after when we switch robots
         leftMotor.setPower(power);
         rightMotor.setPower(power);
     }
-
     public void turnTo(double degrees){
         int turnBy = -1;                 //turns clockwise
+
+//        if(degrees < gyro.getHeading()){
+//            turnBy *= -1;
+//        }
+
         telemetry.addData("In the turnTo Method", gyro.getHeading()+"");
         telemetry.update();
 
@@ -178,21 +171,14 @@ public class BlueTopGlyph2 extends LinearOpMode {
         leftMotor.setPower(0);
         rightMotor.setPower(0);
     }
-
-    public void turnLeft(double power){
+    public void TurnLeft(double power){
         leftMotor.setPower(-power);
         rightMotor.setPower(power);
     }
-
-    public void turnRight(double power){
-        int start = gyro.getHeading();
-        while (opModeIsActive() && gyro.getHeading() != (start + 90) % 360) {
-            leftMotor.setPower(power);
-            rightMotor.setPower(power);
-
-        }
+    public void TurnRight(double power){
+        leftMotor.setPower(power);
+        rightMotor.setPower(-power);
     }
-
     //Pass in right for right, left for left
     public void hitBall(String direction){
 
@@ -221,7 +207,7 @@ public class BlueTopGlyph2 extends LinearOpMode {
         double MAX_ANGLE = dir + 90;
 
         while (dir < MAX_ANGLE) {
-            turnRight(0.1);
+            TurnRight(0.1);
         }
 
     }
